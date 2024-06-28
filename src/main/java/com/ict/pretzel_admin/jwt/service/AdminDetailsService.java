@@ -28,7 +28,7 @@ public class AdminDetailsService implements UserDetailsService{
         return new User(admin.getAdmin_id(), admin.getPwd(), new ArrayList<>());
     }
     
-    // 개인정보 추출 (/api/userInfo 후 AuthController 에서 호출)
+    // 개인정보 추출 
     public AdminVO getAdminDetail(String admin_id) throws Exception{
         AdminVO admin = dashBoardMapper.admin_detail(admin_id);
         return admin;
