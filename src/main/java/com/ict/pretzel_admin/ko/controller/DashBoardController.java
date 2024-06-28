@@ -1,21 +1,18 @@
-package com.ict.pretzel_admin.controller;
+package com.ict.pretzel_admin.ko.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.ict.pretzel_admin.service.AuthSevice;
-import com.ict.pretzel_admin.service.DashBoardService;
-import com.ict.pretzel_admin.vo.DataVO;
-
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+import com.ict.pretzel_admin.jwt.service.AuthSevice;
+import com.ict.pretzel_admin.ko.service.DashBoardService;
+import com.ict.pretzel_admin.vo.DataVO;
 import com.ict.pretzel_admin.vo.AdminVO;
-
 
 @RestController
 @RequestMapping("/main")
@@ -23,6 +20,9 @@ public class DashBoardController {
 
     @Autowired
     private AuthSevice authService;
+
+    @Autowired
+    private DashBoardService dashBoardService;
 
     // 관리자 로그인
     @PostMapping("/admin_login")
@@ -38,16 +38,27 @@ public class DashBoardController {
         //return  authService.authenticate(mvo);
     }
 
-    @Autowired
-    private DashBoardService dashBoardService;
-
     // 구독별 유저수
     @GetMapping("/sub_count")
     public ResponseEntity<?> sub_count() {
         return dashBoardService.sub_count();
     }
     
+    // 월별 유저수
 
+
+    // 영화 장르별 개수
+    @GetMapping("/tema_count")
+    public ResponseEntity<?> thema_count() {
+        return dashBoardService.thema_count();
+    }
+    
+    // 시청률 순 상위 10개
+    @GetMapping("/top_view")
+    public ResponseEntity<?> top_view() {
+        return dashBoardService.top_view();
+    }
+    
     
 
 }

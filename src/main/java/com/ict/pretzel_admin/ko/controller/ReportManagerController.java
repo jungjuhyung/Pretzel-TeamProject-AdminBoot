@@ -1,4 +1,4 @@
-package com.ict.pretzel_admin.controller;
+package com.ict.pretzel_admin.ko.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -6,15 +6,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ict.pretzel_admin.jwt.JwtDecode;
-import com.ict.pretzel_admin.service.ReportManagerService;
+import com.ict.pretzel_admin.ko.service.ReportManagerService;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
-
-
 
 @RestController
 @RequestMapping("/report")

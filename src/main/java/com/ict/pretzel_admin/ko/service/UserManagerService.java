@@ -1,4 +1,4 @@
-package com.ict.pretzel_admin.service;
+package com.ict.pretzel_admin.ko.service;
 
 import java.util.HashMap;
 import java.util.List;
@@ -9,13 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ict.pretzel_admin.common.Paging;
-import com.ict.pretzel_admin.jwt.JwtDecode;
-import com.ict.pretzel_admin.mapper.AdminMapper;
+import com.ict.pretzel_admin.ko.mapper.UserManagerMapper;
 import com.ict.pretzel_admin.vo.ProfileVO;
 import com.ict.pretzel_admin.vo.UserVO;
 
@@ -23,7 +19,7 @@ import com.ict.pretzel_admin.vo.UserVO;
 public class UserManagerService {
 
     @Autowired
-    private AdminMapper adminMapper;
+    private UserManagerMapper userManagerMapper;
 
     @Autowired
     private Paging paging;
@@ -31,7 +27,7 @@ public class UserManagerService {
     // 유저 리스트
     public ResponseEntity<?> user_list(String cPage, String keyword) {
         // 페이징 기법
-		int count = adminMapper.total_user();
+		int count = userManagerMapper.total_user();
 		paging.setTotalRecord(count);
 
 		if (paging.getTotalRecord() <= paging.getNumPerPage()) {
@@ -57,7 +53,7 @@ public class UserManagerService {
 		}
 
         paging.setKeyword(keyword);
-        List<UserVO> user_list = adminMapper.user_list(paging);
+        List<UserVO> user_list = userManagerMapper.user_list(paging);
 
         Map<String, Object> result = new HashMap<>();
         result.put("count", count);
@@ -68,7 +64,7 @@ public class UserManagerService {
     // 유저 상세
     public ResponseEntity<?> user_detail(String user_id){
 
-        UserVO user = adminMapper.user_detail(user_id);
+        UserVO user = userManagerMapper.user_detail(user_id);
         if (user != null) {
             return ResponseEntity.ok(user);
         }
@@ -78,7 +74,7 @@ public class UserManagerService {
     // 프로필 리스트
     public ResponseEntity<?> profile_list(String user_id){
 
-        List<ProfileVO> profile_list = adminMapper.profile_list(user_id);
+        List<ProfileVO> profile_list = userManagerMapper.profile_list(user_id);
         if (profile_list.isEmpty()) {
             return ResponseEntity.ok("0");
         }
@@ -92,7 +88,7 @@ public class UserManagerService {
         UserVO user = new UserVO();
         user.setAdmin_id(admin_id);
         user.setUser_id(user_id);
-        int result = adminMapper.user_stop(user);
+        int result = userManagerMapper.user_stop(user);
         
         return ResponseEntity.ok(result);
     }
@@ -103,7 +99,7 @@ public class UserManagerService {
         UserVO user = new UserVO();
         user.setAdmin_id(admin_id);
         user.setUser_id(user_id);
-        int result = adminMapper.user_recover(user);
+        int result = userManagerMapper.user_recover(user);
         
         return ResponseEntity.ok(result);
     }
@@ -116,7 +112,7 @@ public class UserManagerService {
 
     // 비밀번호 초기화
     public ResponseEntity<?> pwd_reset(String user_id) {
-        UserVO user = adminMapper.user_detail(user_id);
+        UserVO user = userManagerMapper.user_detail(user_id);
         if (user_id != null) {
             //	인증번호 6자리 만들기
             Random random = new Random();
@@ -135,7 +131,7 @@ public class UserManagerService {
             
             // 비밀번호 초기화 하기
             user.setPwd(passwordEncoder.encode(randomNumber));
-            int result = adminMapper.pwd_reset(user);
+            int result = userManagerMapper.pwd_reset(user);
 
             return ResponseEntity.ok(result);
         }

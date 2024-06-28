@@ -1,17 +1,16 @@
-package com.ict.pretzel_admin.controller;
+package com.ict.pretzel_admin.ko.controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import com.ict.pretzel_admin.jwt.JwtDecode;
-import com.ict.pretzel_admin.service.UserManagerService;
-
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.ict.pretzel_admin.jwt.JwtDecode;
+import com.ict.pretzel_admin.ko.service.UserManagerService;
 
 @RestController
 @RequestMapping("/user")

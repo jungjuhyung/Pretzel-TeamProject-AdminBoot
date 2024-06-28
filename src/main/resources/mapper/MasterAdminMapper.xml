@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.ict.pretzel_admin.ko.mapper.MasterAdminMapper">
+
+  <!-- 전체 관리자 수 -->
+   <select id="total_admin">
+    select count(*) from admins
+   </select>
+
+   <!-- 관리자 리스트 -->
+  <select id="admin_list" parameterType="Paging" resultType="AdminVO">
+    select * from admins 
+    order by admin_idx
+    limit #{numPerPage} offset #{offset}
+  </select>
+
+  <!-- 관리자 추가 -->
+   <insert id="admin_insert" parameterType="AdminVO">
+    insert into admins(admin_id, pwd, name, role, note, regdate) 
+    values(#{admin_id}, #{pwd}, #{name}, #{role}, #{note}, NOW()) 
+   </insert>
+
+  <!-- 신고 처리 리스트 -->
+   <select id="admin_report" resultType="ReportVO">
+    select * from reports where admin_id = #{admin_id}
+   </select>
+
+   <!-- 1대1문의 처리 리스트 -->
+    <select id="admin_quest" resultType="QuestionVO">
+      select * from questions where admin_id = #{admin_id}
+    </select>
+
+    <!-- 관리자 수정 -->
+     <update id="admin_update" parameterType="AdminVO">
+      update admins 
+      set role = #{role}, note = #{note}, status = #{status}
+      where admin_idx = #{admin_idx}
+     </update>
+
+
+</mapper>

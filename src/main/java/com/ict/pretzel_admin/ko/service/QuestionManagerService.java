@@ -1,4 +1,4 @@
-package com.ict.pretzel_admin.service;
+package com.ict.pretzel_admin.ko.service;
 
 import java.util.HashMap;
 import java.util.List;
@@ -7,23 +7,26 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ict.pretzel_admin.common.Paging;
-import com.ict.pretzel_admin.jwt.JwtDecode;
-import com.ict.pretzel_admin.mapper.AdminMapper;
+import com.ict.pretzel_admin.ko.mapper.DashBoardMapper;
+import com.ict.pretzel_admin.ko.mapper.QuestionManagerMapper;
+import com.ict.pretzel_admin.ko.mapper.UserManagerMapper;
 import com.ict.pretzel_admin.vo.AdminVO;
 import com.ict.pretzel_admin.vo.ProfileVO;
 import com.ict.pretzel_admin.vo.QuestionVO;
-import com.ict.pretzel_admin.vo.ReportVO;
-import com.ict.pretzel_admin.vo.ReviewVO;
 
 @Service
 public class QuestionManagerService {
 
     @Autowired
-    private AdminMapper adminMapper;
+    private QuestionManagerMapper questionManagerMapper;
+
+    @Autowired
+    private DashBoardMapper dashBoardMapper;
+
+    @Autowired
+    private UserManagerMapper userManagerMapper;
 
     @Autowired
     private Paging paging;
@@ -31,7 +34,7 @@ public class QuestionManagerService {
     // 1대1문의 리스트
     public ResponseEntity<?> quest_list(String cPage) {
         // 페이징 기법
-		int count = adminMapper.total_quest();
+		int count = questionManagerMapper.total_quest();
 		paging.setTotalRecord(count);
 
 		if (paging.getTotalRecord() <= paging.getNumPerPage()) {
@@ -56,8 +59,8 @@ public class QuestionManagerService {
 			paging.setEndBlock(paging.getTotalPage());
 		}
 
-        List<QuestionVO> quest_list = adminMapper.quest_list(paging);       
-        int quest_count = adminMapper.quest_count();
+        List<QuestionVO> quest_list = questionManagerMapper.quest_list(paging);       
+        int quest_count = questionManagerMapper.quest_count();
 
         Map<String, Object> result = new HashMap<>();
         result.put("quest_list", quest_list);
@@ -70,16 +73,16 @@ public class QuestionManagerService {
     public ResponseEntity<?> quest_detail(String question_idx) {
         
         // 문의 정보(제목, 내용, 프로필idx, 작성날짜, 상태 / 답변, 답변날짜, 관리자아이디)
-        QuestionVO question = adminMapper.question_detail(question_idx);
+        QuestionVO question = questionManagerMapper.question_detail(question_idx);
 
         // 문의한 프로필idx -> 문의한 프로필(프로필명, 유저아이디)
-        ProfileVO quest_profile = adminMapper.profile_detail(question.getProfile_idx());
+        ProfileVO quest_profile = userManagerMapper.profile_detail(question.getProfile_idx());
 
         Map<String, Object> result = new HashMap<>();
         
         // 답변한 관리자 아이디 -> 답변한 관리자(이름)
         if (question.getAdmin_id() != null) {
-            AdminVO admin = adminMapper.admin_detail(question.getAdmin_id());
+            AdminVO admin = dashBoardMapper.admin_detail(question.getAdmin_id());
             result.put("admin_name", admin.getName()); // 답변한 관리자 이름
         }
 
@@ -92,7 +95,7 @@ public class QuestionManagerService {
     // 1대1 문의 답변
     public ResponseEntity<?> quest_answer(QuestionVO question) {
 
-        int result = adminMapper.quest_answer(question);
+        int result = questionManagerMapper.quest_answer(question);
 
         return ResponseEntity.ok(result);
     }

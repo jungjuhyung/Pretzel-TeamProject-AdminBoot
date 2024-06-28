@@ -1,10 +1,10 @@
-package com.ict.pretzel_admin.service;
+package com.ict.pretzel_admin.ko.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import com.ict.pretzel_admin.common.MailHandler;
+import com.ict.pretzel_admin.ko.vo.MailHandler;
 
 @Service
 public class MailService {

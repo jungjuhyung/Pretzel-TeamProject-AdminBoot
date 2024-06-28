@@ -1,4 +1,4 @@
-package com.ict.pretzel_admin.service;
+package com.ict.pretzel_admin.jwt.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,14 +22,13 @@ public class AuthSevice {
     @Autowired
     private AdminDetailsService adminDetailsService;
     
-    
     public DataVO authenticate(AdminVO admin){
         DataVO dataVO = new DataVO();
         try {
             Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(admin.getAdmin_id(), admin.getPwd()));
 
-            // DB 에서 사용자 정보 가져오기
+            // DB 에서 관리자 정보 가져오기
             admin = adminDetailsService.getAdminDetail(admin.getAdmin_id());
 
             // 토큰 생성

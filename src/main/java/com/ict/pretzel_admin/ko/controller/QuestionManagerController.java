@@ -1,4 +1,4 @@
-package com.ict.pretzel_admin.controller;
+package com.ict.pretzel_admin.ko.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ict.pretzel_admin.jwt.JwtDecode;
-import com.ict.pretzel_admin.service.QuestionManagerService;
+import com.ict.pretzel_admin.ko.service.QuestionManagerService;
 import com.ict.pretzel_admin.vo.QuestionVO;
 
 import org.springframework.web.bind.annotation.PostMapping;

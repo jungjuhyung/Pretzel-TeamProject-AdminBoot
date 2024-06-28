@@ -1,4 +1,4 @@
-package com.ict.pretzel_admin.common;
+package com.ict.pretzel_admin.ko.vo;
 
 import lombok.Data;
 

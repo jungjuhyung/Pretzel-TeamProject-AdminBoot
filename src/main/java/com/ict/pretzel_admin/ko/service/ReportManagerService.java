@@ -1,4 +1,4 @@
-package com.ict.pretzel_admin.service;
+package com.ict.pretzel_admin.ko.service;
 
 import java.util.HashMap;
 import java.util.List;
@@ -7,22 +7,22 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ict.pretzel_admin.common.Paging;
-import com.ict.pretzel_admin.jwt.JwtDecode;
+import com.ict.pretzel_admin.ko.mapper.ReportManagerMapper;
+import com.ict.pretzel_admin.ko.mapper.UserManagerMapper;
 import com.ict.pretzel_admin.vo.ProfileVO;
 import com.ict.pretzel_admin.vo.ReportVO;
 import com.ict.pretzel_admin.vo.ReviewVO;
-import com.ict.pretzel_admin.mapper.AdminMapper;
 
 @Service
 public class ReportManagerService {
 
     @Autowired
-    private AdminMapper adminMapper;
+    private ReportManagerMapper reportManagerMapper;
+
+    @Autowired
+    private UserManagerMapper userManagerMapper;
 
     @Autowired
     private Paging paging;
@@ -30,7 +30,7 @@ public class ReportManagerService {
     public ResponseEntity<?> report_list(String cPage) {
 
         // 페이징 기법
-		int count = adminMapper.total_report();
+		int count = reportManagerMapper.total_report();
 		paging.setTotalRecord(count);
 
 		if (paging.getTotalRecord() <= paging.getNumPerPage()) {
@@ -55,8 +55,8 @@ public class ReportManagerService {
 			paging.setEndBlock(paging.getTotalPage());
 		}
 
-        List<ReportVO> report_list = adminMapper.report_list(paging);
-        int report_count = adminMapper.report_count();
+        List<ReportVO> report_list = reportManagerMapper.report_list(paging);
+        int report_count = reportManagerMapper.report_count();
 
         Map<String, Object> result = new HashMap<>();
         result.put("report_list", report_list);
@@ -69,16 +69,16 @@ public class ReportManagerService {
     public ResponseEntity<?> report_detail(String report_idx) {
         
         // 신고 정보(신고유형, 프로필idx, 리뷰idx)
-        ReportVO report = adminMapper.report_detail(report_idx);
+        ReportVO report = reportManagerMapper.report_detail(report_idx);
 
         // 신고한 프로필idx -> 신고한 프로필(프로필명, 유저아이디)
-        ProfileVO report_profile = adminMapper.profile_detail(report.getProfile_idx());
+        ProfileVO report_profile = userManagerMapper.profile_detail(report.getProfile_idx());
 
         // 리뷰idx -> 신고당한 리뷰(리뷰내용, 프로필idx)
-        ReviewVO reported_review = adminMapper.reported_review(report.getReview_idx());
+        ReviewVO reported_review = reportManagerMapper.reported_review(report.getReview_idx());
 
         // 신고당한 프로필idx -> 신고당한 프로필(유저아이디)
-        ProfileVO reported_profile = adminMapper.profile_detail(reported_review.getProfile_idx());
+        ProfileVO reported_profile = userManagerMapper.profile_detail(reported_review.getProfile_idx());
         
         Map<String, Object> result = new HashMap<>();
         result.put("report", report); // 신고VO
@@ -95,7 +95,7 @@ public class ReportManagerService {
         ReportVO report = new ReportVO();
         report.setAdmin_id(admin_id);
         report.setReport_idx(report_idx);
-        int result = adminMapper.report_ok(report);
+        int result = reportManagerMapper.report_ok(report);
 
         return ResponseEntity.ok(result);
     }
