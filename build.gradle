@@ -55,6 +55,10 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 
 	implementation 'org.json:json:20230227'
+
+	// 구글 스토리지 업로드용
+	implementation platform('com.google.cloud:libraries-bom:26.41.0')
+	implementation 'com.google.cloud:google-cloud-storage'
 }
 
 tasks.named('test') {

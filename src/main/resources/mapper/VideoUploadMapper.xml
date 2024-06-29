@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.ict.pretzel.jung.mapper.VideoUploadMapper">
+  
+  <insert id="video_insert">
+    INSERT INTO movies (movie_id, original_title, trans_title, movie_src, regdate)
+    VALUES (#{movie_id}, #{original_title}, #{trans_title}, #{movie_src}, sysdate())
+  </insert>
+
+  <insert id="thema_insert">
+    <selectKey keyProperty="movie_idx" resultType="String" order="BEFORE">
+      SELECT (IFNULL(MAX(movie_idx),0)) as movie_idx FROM movies
+    </selectKey>
+    INSERT INTO thema (movie_idx, thema) 
+    VALUES (#{movie_idx}, #{thema})
+  </insert>
+</mapper>
