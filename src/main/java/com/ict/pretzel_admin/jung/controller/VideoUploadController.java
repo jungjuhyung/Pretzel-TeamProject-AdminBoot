@@ -52,7 +52,7 @@ public class VideoUploadController {
                         .setContentType(ext)
                         .build(),
                         videoUploadVO.getVideo().getInputStream());
-        videoUploadVO.setMovie_src(uuid);
+        videoUploadVO.setMovie_url(uuid);
         
         videoUploadService.video_insert(videoUploadVO);
         videoUploadService.thema_insert(videoUploadVO);
