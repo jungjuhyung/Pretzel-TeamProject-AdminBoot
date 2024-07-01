@@ -23,10 +23,10 @@ public interface MasterAdminMapper {
     int admin_insert(AdminVO admin);
     
     // 신고처리 리스트
-    List<ReportVO> admin_report(@Param("admin_idx") String admin_idx);
+    List<ReportVO> admin_report(@Param("admin_id") String admin_id);
 
     // 1대1문의 처리 리스트
-    List<QuestionVO> admin_quest(@Param("admin_idx") String admin_idx);
+    List<QuestionVO> admin_quest(@Param("admin_id") String admin_id);
 
     // 관리자 수정
     int admin_update(AdminVO admin); 

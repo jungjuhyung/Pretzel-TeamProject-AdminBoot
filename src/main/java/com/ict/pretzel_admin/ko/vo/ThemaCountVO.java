@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class ThemaCountVO {
-    private String tema;
+    private String thema;
     private int count;
 }

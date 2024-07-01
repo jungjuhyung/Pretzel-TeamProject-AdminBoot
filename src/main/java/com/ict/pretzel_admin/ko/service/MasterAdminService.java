@@ -9,11 +9,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.ict.pretzel_admin.vo.ReportVO;
 import com.ict.pretzel_admin.common.Paging;
 import com.ict.pretzel_admin.ko.mapper.MasterAdminMapper;
 import com.ict.pretzel_admin.vo.AdminVO;
 import com.ict.pretzel_admin.vo.QuestionVO;
+import com.ict.pretzel_admin.vo.ReportVO;
 
 @Service
 public class MasterAdminService {
@@ -71,17 +71,17 @@ public class MasterAdminService {
     }
 
     // 신고처리 리스트(관리자 상세)
-    public ResponseEntity<?> admin_report(@RequestParam("admin_idx") String admin_idx) {
+    public ResponseEntity<?> admin_report(@RequestParam("admin_id") String admin_id) {
 
-        List<ReportVO> report_list = masterAdminMapper.admin_report(admin_idx);
+        List<ReportVO> report_list = masterAdminMapper.admin_report(admin_id);
 
         return ResponseEntity.ok(report_list);
     }
     
     // 1대1문의 처리 리스트(관리자 상세)
-    public ResponseEntity<?> admin_quest(@RequestParam("admin_idx") String admin_idx) {
+    public ResponseEntity<?> admin_quest(@RequestParam("admin_id") String admin_id) {
 
-        List<QuestionVO> quest_list = masterAdminMapper.admin_quest(admin_idx);
+        List<QuestionVO> quest_list = masterAdminMapper.admin_quest(admin_id);
 
         return ResponseEntity.ok(quest_list);
     }

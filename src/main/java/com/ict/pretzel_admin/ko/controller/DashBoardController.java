@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ict.pretzel_admin.jwt.service.AuthSevice;
 import com.ict.pretzel_admin.ko.service.DashBoardService;
-import com.ict.pretzel_admin.vo.DataVO;
 import com.ict.pretzel_admin.vo.AdminVO;
+import com.ict.pretzel_admin.vo.DataVO;
 
 @RestController
 @RequestMapping("/main")
@@ -45,10 +45,11 @@ public class DashBoardController {
     }
     
     // 월별 유저수
+    
 
 
     // 영화 장르별 개수
-    @GetMapping("/tema_count")
+    @GetMapping("/thema_count")
     public ResponseEntity<?> thema_count() {
         return dashBoardService.thema_count();
     }

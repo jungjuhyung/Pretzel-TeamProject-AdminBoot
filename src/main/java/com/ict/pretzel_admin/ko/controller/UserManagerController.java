@@ -40,7 +40,7 @@ public class UserManagerController {
     
 
     // 정지 시키기
-    @PostMapping("/user_fire")
+    @PostMapping("/user_stop")
     public ResponseEntity<?> user_stop(@RequestHeader("Authorization") String token, 
                                     @RequestParam("user_id") String user_id) {
         JwtDecode jwtDecode = new JwtDecode(token);

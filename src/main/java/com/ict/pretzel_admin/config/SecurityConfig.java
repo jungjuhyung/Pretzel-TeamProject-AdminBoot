@@ -40,7 +40,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
         )
         .logout(logout -> logout
-                        .logoutUrl("/admin/logout")
+                        .logoutUrl("/logout")
                         .logoutSuccessHandler((request, response, authentication) -> {
                             response.setStatus(200);
                         })

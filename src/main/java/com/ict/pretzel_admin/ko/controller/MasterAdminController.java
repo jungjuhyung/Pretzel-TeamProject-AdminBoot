@@ -35,14 +35,14 @@ public class MasterAdminController {
     
     // 신고 처리 리스트
     @GetMapping("/admin_report")
-    public ResponseEntity<?> admin_report(@RequestParam("admin_idx") String admin_idx) {
-        return masterAdminService.admin_report(admin_idx);
+    public ResponseEntity<?> admin_report(@RequestParam("admin_id") String admin_id) {
+        return masterAdminService.admin_report(admin_id);
     }
     
     // 1대1문의 처리 리스트
     @GetMapping("/admin_quest")
-    public ResponseEntity<?> admin_quest(@RequestParam("admin_idx") String admin_idx) {
-        return masterAdminService.admin_quest(admin_idx);
+    public ResponseEntity<?> admin_quest(@RequestParam("admin_id") String admin_id) {
+        return masterAdminService.admin_quest(admin_id);
     }
 
     // 관리자 수정

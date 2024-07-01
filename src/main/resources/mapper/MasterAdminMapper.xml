@@ -37,7 +37,7 @@
      <update id="admin_update" parameterType="AdminVO">
       update admins 
       set role = #{role}, note = #{note}, status = #{status}
-      where admin_idx = #{admin_idx}
+      where admin_id = #{admin_id}
      </update>
 
 
