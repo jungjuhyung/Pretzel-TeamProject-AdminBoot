@@ -3,7 +3,7 @@ package com.ict.pretzel_admin.ko.vo;
 import lombok.Data;
 
 @Data
-public class SubsCountVO {
+public class SubCountVO {
     private String subs;
     private int count;
 }

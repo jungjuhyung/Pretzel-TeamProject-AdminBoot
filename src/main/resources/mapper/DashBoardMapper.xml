@@ -11,15 +11,23 @@
   </select>
 
   <!-- 구독별 카운트 -->
-  <select id="sub_count" resultType="SubsCountVO">
+  <select id="sub_count" resultType="SubCountVO">
     SELECT COALESCE(subs, 'null') AS subs, COUNT(*) AS count
     FROM users
     WHERE status = 1
-    GROUP BY subs;
+    GROUP BY subs
   </select>
 
   <!-- 월별 유저수 -->
-  
+   <select id="month_count" resultType="MonthCountVO">
+     SELECT DATE_FORMAT(regdate, '%Y-%m') AS month, COUNT(*) AS count 
+     FROM users 
+     WHERE <!-- 3개월 전 1일보다 크고, 현재달 1일보다 작은 -->
+      regdate &gt;= DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 3 MONTH), '%Y-%m-01')
+      AND regdate &lt; DATE_FORMAT(CURDATE(), '%Y-%m-01')
+     GROUP BY month 
+     ORDER BY month
+   </select>
 
   <!-- 장르별 카운트 -->
   <select id="thema_count" resultType="ThemaCountVO">

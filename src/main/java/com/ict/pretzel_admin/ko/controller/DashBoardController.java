@@ -45,7 +45,10 @@ public class DashBoardController {
     }
     
     // 월별 유저수
-    
+    @GetMapping("/month_count")
+    public ResponseEntity<?> month_count() {
+        return dashBoardService.month_count();
+    } 
 
 
     // 영화 장르별 개수
