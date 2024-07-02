@@ -94,8 +94,8 @@ public class MovieController {
 		return ResponseEntity.ok(0);
 	}
 
-	@GetMapping("/insert_video")
-    public ResponseEntity<?> insert_video(@RequestHeader("Authorization") String token, MovieVO movieVO) throws IOException {
+	@GetMapping("/insert_movie")
+    public ResponseEntity<?> insert_movie(@RequestHeader("Authorization") String token, MovieVO movieVO) throws IOException {
         try {
             // 스토리지 생성
             GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream("src/main/resources/ict-pretzel-43373d904ced.json"));
