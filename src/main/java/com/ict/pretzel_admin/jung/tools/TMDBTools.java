@@ -160,7 +160,7 @@ public class TMDBTools {
 					}else if (video_info.getString("type").equals("Teaser Trailer") && video_info.getString("site").equals("YouTube")) {
 						trailer = String.valueOf(video_info.get("id"));
 						continue;
-					}else if (video_info.getString("type").equals("Teaser") && video_info.getString("site").equals("YouTube")) {
+					}else if (video_info.getString("type").equals("Trailer") && video_info.getString("site").equals("YouTube")) {
 						trailer = String.valueOf(video_info.get("id"));
 						continue;
 					}

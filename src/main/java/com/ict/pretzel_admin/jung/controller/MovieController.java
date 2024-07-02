@@ -1,17 +1,18 @@
 package com.ict.pretzel_admin.jung.controller;
 
+import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.UUID;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.List;
-import java.util.ArrayList;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.net.HttpURLConnection;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.BlobId;
@@ -158,6 +160,7 @@ public class MovieController {
                 }
                 
             Map<String, String> detail = tmdbTools.detail(movie_id);
+            movieVO.setTmdb_title(detail.get("tmdb_title"));
             movieVO.setPoster_url(detail.get("poster_url"));
             movieVO.setBackdrop_url(detail.get("backdrop_url"));
             movieVO.setRuntime(detail.get("runtime"));
