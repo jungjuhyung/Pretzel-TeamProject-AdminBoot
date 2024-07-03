@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -65,7 +66,7 @@ public class MovieController {
 			if (year.equals("")) {
 				apiURL = "https://api.themoviedb.org/3/search/movie?query="+encode_query+"&include_adult=true&language=ko-kr&language=en-US";
 			}else{
-				apiURL = "https://api.themoviedb.org/3/search/movie?query="+encode_query+"&year="+encode_year+"&include_adult=true&language=ko-kr&language=en-US";
+				apiURL = "https://api.themoviedb.org/3/search/movie?query="+encode_query+"&primary_release_year="+encode_year+"&include_adult=true&language=ko-kr&language=en-US";
 			}
 			System.out.println(apiURL);
 			URL url = new URL(apiURL);
@@ -96,7 +97,7 @@ public class MovieController {
 		return ResponseEntity.ok(0);
 	}
 
-	@GetMapping("/insert_movie")
+	@PostMapping("/insert_movie")
     public ResponseEntity<?> insert_movie(@RequestHeader("Authorization") String token, MovieVO movieVO) throws IOException {
         try {
             // 스토리지 생성
@@ -104,7 +105,7 @@ public class MovieController {
             Storage storage = StorageOptions.newBuilder()
             .setCredentials(credentials)
             .setProjectId(id).build().getService();
-            
+            System.out.println("1111");
             JwtDecode jwtDecode = new JwtDecode(token); 
             String movie_id = movieVO.getMovie_id();
             String storage_folder = "";
@@ -184,7 +185,7 @@ public class MovieController {
             return ResponseEntity.ok(0);
         }
     }
-	@GetMapping("/update_movie")
+	@PostMapping("/update_movie")
     public ResponseEntity<?> update_movie(@RequestHeader("Authorization") String token, MovieVO movieVO) throws IOException {
         try {
             MovieVO movie_info = movieService.movie_info(movieVO.getMovie_idx());
