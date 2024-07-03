@@ -152,7 +152,7 @@ public class MovieController {
                     BlobInfo.newBuilder(bucketName, storage_folder+movieVO.getSubtitle().getOriginalFilename())
                     .setContentType(subtitle_ext)
                     .build(),
-                    movieVO.getMovie().getInputStream());
+                    movieVO.getSubtitle().getInputStream());
                     movieVO.setSubtitle_url(storage_folder+subtitle_name);
                     movieVO.setSub_del_name(storage_folder+movieVO.getSubtitle().getOriginalFilename());
                 }
@@ -251,7 +251,7 @@ public class MovieController {
                         BlobInfo.newBuilder(bucketName, storage_folder+subtitle_name)
                         .setContentType(subtitle_ext)
                         .build(),
-                        movieVO.getMovie().getInputStream());
+                        movieVO.getSubtitle().getInputStream());
                         movieVO.setSubtitle_url(storage_folder+subtitle_name);
                         movieVO.setSub_del_name(storage_folder+movieVO.getSubtitle().getOriginalFilename());
                 }
