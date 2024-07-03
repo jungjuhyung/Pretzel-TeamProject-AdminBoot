@@ -65,7 +65,7 @@ public class MovieController {
 			if (year.equals("")) {
 				apiURL = "https://api.themoviedb.org/3/search/movie?query="+encode_query+"&include_adult=true&language=ko-kr&language=en-US";
 			}else{
-				apiURL = "https://api.themoviedb.org/3/search/movie?query="+encode_query+"&year="+encode_year+"&include_adult=true&language=ko-kr&language=en-US";
+				apiURL = "https://api.themoviedb.org/3/search/movie?query="+encode_query+"&primary_release_year="+encode_year+"&include_adult=true&language=ko-kr&language=en-US";
 			}
 			System.out.println(apiURL);
 			URL url = new URL(apiURL);
