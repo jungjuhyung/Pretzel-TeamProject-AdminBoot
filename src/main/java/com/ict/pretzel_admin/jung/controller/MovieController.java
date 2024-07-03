@@ -131,17 +131,16 @@ public class MovieController {
                 break;
             }
             
-            String uuid = UUID.randomUUID().toString();
             String video_ext = movieVO.getMovie().getContentType(); // 파일의 형식 ex) JPG
             String video_name = URLEncoder.encode(movieVO.getMovie().getOriginalFilename(), "UTF-8").replaceAll("\\+", "%20");
             // Cloud에 비디오 업로드
             BlobInfo blobVideoInfo = storage.createFrom(
-                BlobInfo.newBuilder(bucketName, storage_folder+movieVO.getMovie().getOriginalFilename()+"_"+uuid)
+                BlobInfo.newBuilder(bucketName, storage_folder+movieVO.getMovie().getOriginalFilename())
                 .setContentType(video_ext)
                 .build(),
                 movieVO.getMovie().getInputStream());
-                movieVO.setMovie_url(storage_folder+video_name+"_"+uuid);
-                movieVO.setMovie_del_name(storage_folder+movieVO.getMovie().getOriginalFilename()+"_"+uuid);
+                movieVO.setMovie_url(storage_folder+video_name);
+                movieVO.setMovie_del_name(storage_folder+movieVO.getMovie().getOriginalFilename());
                 movieVO.setSubtitle_url("");
                 movieVO.setSub_del_name("");
 
@@ -150,13 +149,12 @@ public class MovieController {
                 String subtitle_ext = movieVO.getSubtitle().getContentType();
                 String subtitle_name = URLEncoder.encode(movieVO.getSubtitle().getOriginalFilename(), "UTF-8").replaceAll("\\+", "%20");
                 BlobInfo blobSubtitleInfo = storage.createFrom(
-                    BlobInfo.newBuilder(bucketName, storage_folder+movieVO.getSubtitle().getOriginalFilename()+"_"+uuid)
+                    BlobInfo.newBuilder(bucketName, storage_folder+movieVO.getSubtitle().getOriginalFilename())
                     .setContentType(subtitle_ext)
                     .build(),
                     movieVO.getMovie().getInputStream());
-                    
-                    movieVO.setSubtitle_url(storage_folder+subtitle_name+"_"+uuid);
-                    movieVO.setSub_del_name(storage_folder+movieVO.getSubtitle().getOriginalFilename()+"_"+uuid);
+                    movieVO.setSubtitle_url(storage_folder+subtitle_name);
+                    movieVO.setSub_del_name(storage_folder+movieVO.getSubtitle().getOriginalFilename());
                 }
                 
             Map<String, String> detail = tmdbTools.detail(movie_id);
@@ -206,7 +204,7 @@ public class MovieController {
                 Blob sub_blob = storage.get(bucketName, movie_info.getSub_del_name());
                 BlobId sub_blobId = sub_blob.getBlobId();
                 boolean sub_deleted = storage.delete(sub_blobId);
-
+                
                 // 새로운 영화 및 자막 업데이트
                 String storage_folder = "";
                 switch (movieVO.getThema()) {
@@ -232,28 +230,30 @@ public class MovieController {
                     break;
                 }
                 
-                String uuid = UUID.randomUUID().toString();
                 String video_ext = movieVO.getMovie().getContentType(); // 파일의 형식 ex) JPG
                 String video_name = URLEncoder.encode(movieVO.getMovie().getOriginalFilename(), "UTF-8").replaceAll("\\+", "%20");
                 // Cloud에 비디오 업로드
                 BlobInfo blobVideoInfo = storage.createFrom(
-                    BlobInfo.newBuilder(bucketName, storage_folder+video_name+"_"+uuid)
+                    BlobInfo.newBuilder(bucketName, storage_folder+video_name)
                     .setContentType(video_ext)
                     .build(),
                     movieVO.getMovie().getInputStream());
-                    movieVO.setMovie_url(storage_folder+video_name+"_"+uuid);
+                    movieVO.setMovie_url(storage_folder+video_name);
+                    movieVO.setMovie_del_name(storage_folder+movieVO.getMovie().getOriginalFilename());
                     movieVO.setSubtitle_url("");
-                    
+                    movieVO.setSub_del_name("");
+
                 // Cloud에 자막 업로드
                 if (movieVO.getSubtitle() != null) {
                     String subtitle_ext = movieVO.getSubtitle().getContentType();
                     String subtitle_name = URLEncoder.encode(movieVO.getSubtitle().getOriginalFilename(), "UTF-8").replaceAll("\\+", "%20");
                     BlobInfo blobSubtitleInfo = storage.createFrom(
-                        BlobInfo.newBuilder(bucketName, storage_folder+subtitle_name+"_"+uuid)
+                        BlobInfo.newBuilder(bucketName, storage_folder+subtitle_name)
                         .setContentType(subtitle_ext)
                         .build(),
                         movieVO.getMovie().getInputStream());
-                        movieVO.setSubtitle_url(storage_folder+subtitle_name+"_"+uuid);
+                        movieVO.setSubtitle_url(storage_folder+subtitle_name);
+                        movieVO.setSub_del_name(storage_folder+movieVO.getSubtitle().getOriginalFilename());
                 }
             }
             
