@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ict.pretzel_admin.jwt.JwtDecode;
 import com.ict.pretzel_admin.ko.service.UserManagerService;
+import com.ict.pretzel_admin.vo.UserVO;
 
 @RestController
 @RequestMapping("/user")
@@ -27,38 +29,38 @@ public class UserManagerController {
     }
     
     // 유저 상세
-    @GetMapping("/user_detail")
-    public ResponseEntity<?> user_detail(@RequestParam("user_id") String user_id){
-        return userManagerService.user_detail(user_id);
+    @PostMapping("/user_detail")
+    public ResponseEntity<?> user_detail(@RequestBody UserVO user){
+        return userManagerService.user_detail(user.getUser_id());
     }
     
     // 프로필 리스트
-    @GetMapping("/profile_list")
-    public ResponseEntity<?> profile_list(@RequestParam("user_id") String user_id){
-        return userManagerService.profile_list(user_id);
+    @PostMapping("/profile_list")
+    public ResponseEntity<?> profile_list(@RequestBody UserVO user){
+        return userManagerService.profile_list(user.getUser_id());
     }
     
 
     // 정지 시키기
     @PostMapping("/user_stop")
     public ResponseEntity<?> user_stop(@RequestHeader("Authorization") String token, 
-                                    @RequestParam("user_id") String user_id) {
+                                    @RequestBody UserVO user) {
         JwtDecode jwtDecode = new JwtDecode(token);
-        return userManagerService.user_stop(jwtDecode.getAdmin_id(), user_id);
+        return userManagerService.user_stop(jwtDecode.getAdmin_id(), user.getUser_id());
     }
     
     // 정지 해제 (활성화)
     @PostMapping("/user_recover")
     public ResponseEntity<?> user_recover(@RequestHeader("Authorization") String token, 
-                                    @RequestParam("user_id") String user_id) {
+                                            @RequestBody UserVO user) {
         JwtDecode jwtDecode = new JwtDecode(token);
-        return userManagerService.user_recover(jwtDecode.getAdmin_id(), user_id);
+        return userManagerService.user_recover(jwtDecode.getAdmin_id(), user.getUser_id());
     }
     
     // 비밀번호 초기화
-    @GetMapping("/pwd_reset")
-    public ResponseEntity<?> pwd_reset(@RequestParam("user_id") String user_id){
-        return userManagerService.pwd_reset(user_id);
+    @PostMapping("/pwd_reset")
+    public ResponseEntity<?> pwd_reset(@RequestBody UserVO user){
+        return userManagerService.pwd_reset(user.getUser_id());
     }
 
 

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ict.pretzel_admin.ko.service.MasterAdminService;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.ict.pretzel_admin.vo.AdminVO;
@@ -28,25 +29,25 @@ public class MasterAdminController {
     }
 
     // 관리자 추가
-    @GetMapping("/admin_insert")
+    @PostMapping("/admin_insert")
     public ResponseEntity<?> admin_insert(@RequestBody AdminVO admin) {
         return masterAdminService.admin_insert(admin);
     }
     
     // 신고 처리 리스트
-    @GetMapping("/admin_report")
-    public ResponseEntity<?> admin_report(@RequestParam("admin_id") String admin_id) {
-        return masterAdminService.admin_report(admin_id);
+    @PostMapping("/admin_report")
+    public ResponseEntity<?> admin_report(@RequestBody AdminVO admin) {
+        return masterAdminService.admin_report(admin.getAdmin_id());
     }
     
     // 1대1문의 처리 리스트
-    @GetMapping("/admin_quest")
-    public ResponseEntity<?> admin_quest(@RequestParam("admin_id") String admin_id) {
-        return masterAdminService.admin_quest(admin_id);
+    @PostMapping("/admin_quest")
+    public ResponseEntity<?> admin_quest(@RequestBody AdminVO admin) {
+        return masterAdminService.admin_quest(admin.getAdmin_id());
     }
 
     // 관리자 수정
-    @GetMapping("/admin_update")
+    @PostMapping("/admin_update")
     public ResponseEntity<?> admin_update(@RequestBody AdminVO admin) {
         return masterAdminService.admin_update(admin);
     }

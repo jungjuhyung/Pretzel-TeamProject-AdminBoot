@@ -31,9 +31,9 @@ public class QuestionManagerController {
     }
     
     // 1대1문의 상세 페이지
-    @GetMapping("/quest_detail")
-    public ResponseEntity<?> quest_detail(@RequestParam("question_idx") String question_idx) {
-        return questionManagerService.quest_detail(question_idx);
+    @PostMapping("/quest_detail")
+    public ResponseEntity<?> quest_detail(@RequestBody QuestionVO question) {
+        return questionManagerService.quest_detail(question.getQuestion_idx());
     }
 
     // 1대1문의 답변
