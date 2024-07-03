@@ -61,7 +61,7 @@ public class MasterAdminService {
     }
 
     // 관리자 추가
-    public ResponseEntity<?> admin_insert(@RequestBody AdminVO admin) {
+    public ResponseEntity<?> admin_insert(AdminVO admin) {
 
         admin.setPwd(passwordEncoder.encode(admin.getPwd()));
 
@@ -71,7 +71,7 @@ public class MasterAdminService {
     }
 
     // 신고처리 리스트(관리자 상세)
-    public ResponseEntity<?> admin_report(@RequestParam("admin_id") String admin_id) {
+    public ResponseEntity<?> admin_report(String admin_id) {
 
         List<ReportVO> report_list = masterAdminMapper.admin_report(admin_id);
 
@@ -79,7 +79,7 @@ public class MasterAdminService {
     }
     
     // 1대1문의 처리 리스트(관리자 상세)
-    public ResponseEntity<?> admin_quest(@RequestParam("admin_id") String admin_id) {
+    public ResponseEntity<?> admin_quest(String admin_id) {
 
         List<QuestionVO> quest_list = masterAdminMapper.admin_quest(admin_id);
 
@@ -87,7 +87,7 @@ public class MasterAdminService {
     }
 
     // 관리자 수정
-    public ResponseEntity<?> admin_update(@RequestBody AdminVO admin) {
+    public ResponseEntity<?> admin_update(AdminVO admin) {
 
         int result = masterAdminMapper.admin_update(admin); 
 

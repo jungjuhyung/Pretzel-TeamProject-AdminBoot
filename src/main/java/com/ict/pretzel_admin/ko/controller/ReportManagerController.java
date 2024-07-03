@@ -7,11 +7,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ict.pretzel_admin.jwt.JwtDecode;
 import com.ict.pretzel_admin.ko.service.ReportManagerService;
+import com.ict.pretzel_admin.vo.ReportVO;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/report")
@@ -27,17 +29,17 @@ public class ReportManagerController {
     }
 
     // 신고 상세 페이지
-    @GetMapping("/report_detail")
-    public ResponseEntity<?> report_detail(@RequestParam("report_idx") String report_idx) {
-        return reportManagerService.report_detail(report_idx);
+    @PostMapping("/report_detail")
+    public ResponseEntity<?> report_detail(@RequestBody ReportVO report) {
+        return reportManagerService.report_detail(report.getReport_idx());
     }
     
     // 신고 처리
     @PostMapping("/report_ok")
     public ResponseEntity<?> report_ok(@RequestHeader("Authorization") String token, 
-                                    @RequestParam("report_idx") String report_idx) {
+                                        @RequestBody ReportVO report) {
         JwtDecode jwtDecode = new JwtDecode(token);            
-        return reportManagerService.report_ok(jwtDecode.getAdmin_id(), report_idx);
+        return reportManagerService.report_ok(jwtDecode.getAdmin_id(), report.getReport_idx());
     }
     
 
