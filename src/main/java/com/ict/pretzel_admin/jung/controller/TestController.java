@@ -9,6 +9,7 @@ import java.net.URLEncoder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,8 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.BlobId;
+import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
+import com.ict.pretzel_admin.jwt.JwtDecode;
+import com.ict.pretzel_admin.vo.CastVO;
+import com.ict.pretzel_admin.vo.CrewVO;
+import com.ict.pretzel_admin.vo.MovieVO;
 
 import io.jsonwebtoken.io.IOException;
 import java.io.FileInputStream;
@@ -271,4 +277,49 @@ public class TestController {
 			return ResponseEntity.ok("0");
 		}
 	}
+	@GetMapping("/insert_subtitle")
+    public ResponseEntity<?> insert_subtitle(MovieVO movieVO) throws IOException {
+        try {
+            // 스토리지 생성
+            GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream("src/main/resources/ict-pretzel-43373d904ced.json"));
+            Storage storage = StorageOptions.newBuilder()
+            .setCredentials(credentials)
+            .setProjectId(id).build().getService();
+            
+            String storage_folder = "";
+            switch (movieVO.getThema()) {
+                case "로맨스":
+                storage_folder = "pretzel-romance/";
+                break;
+                case "코믹":
+                storage_folder = "pretzel-comic/";
+                break;
+                case "범죄/스릴러":
+                storage_folder = "pretzel-crime/";
+                break;
+                case "액션":
+                storage_folder = "pretzel-action/";
+                break;
+                case "애니메이션":
+                storage_folder = "pretzel-ani/";
+                break;
+                case "공포":
+                storage_folder = "pretzel-horror/";
+                break;
+                default:
+                break;
+            }
+            
+            // Cloud에 자막 업로드
+			String subtitle_ext = movieVO.getSubtitle().getContentType();
+			BlobInfo blobSubtitleInfo = storage.createFrom(
+				BlobInfo.newBuilder(bucketName, storage_folder+movieVO.getSubtitle().getOriginalFilename())
+				.setContentType(subtitle_ext)
+				.build(),
+				movieVO.getSubtitle().getInputStream());
+            return ResponseEntity.ok(1);
+        } catch (Exception e) {
+            return ResponseEntity.ok(0);
+        }
+    }
 }
