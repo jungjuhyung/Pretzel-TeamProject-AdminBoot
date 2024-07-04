@@ -1,19 +1,18 @@
 package com.ict.pretzel_admin.ko.controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.ict.pretzel_admin.jwt.JwtDecode;
 import com.ict.pretzel_admin.ko.service.QuestionManagerService;
 import com.ict.pretzel_admin.vo.QuestionVO;
-
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 
 
 
@@ -32,8 +31,10 @@ public class QuestionManagerController {
     
     // 1대1문의 상세 페이지
     @PostMapping("/quest_detail")
-    public ResponseEntity<?> quest_detail(@RequestBody QuestionVO question) {
-        return questionManagerService.quest_detail(question.getQuestion_idx());
+    public ResponseEntity<?> quest_detail(@RequestHeader("Authorization") String token, 
+                                        @RequestBody QuestionVO question) {
+        JwtDecode jwtDecode = new JwtDecode(token);
+        return questionManagerService.quest_detail(question.getQuestion_idx(), jwtDecode.getAdmin_id());
     }
 
     // 1대1문의 답변

@@ -75,7 +75,7 @@ public class QuestionManagerService {
     }
 
     // 1대1문의 상세
-    public ResponseEntity<?> quest_detail(String question_idx) {
+    public ResponseEntity<?> quest_detail(String question_idx, String admin_id) {
         
         // 문의 정보(제목, 내용, 프로필idx, 작성날짜, 상태 / 답변, 답변날짜, 관리자아이디)
         QuestionVO question = questionManagerMapper.question_detail(question_idx);
@@ -88,6 +88,10 @@ public class QuestionManagerService {
         // 답변한 관리자 아이디 -> 답변한 관리자(이름)
         if (question.getAdmin_id() != null) {
             AdminVO admin = dashBoardMapper.admin_detail(question.getAdmin_id());
+            result.put("admin_name", admin.getName()); // 답변한 관리자 이름
+        }else{
+            question.setAdmin_id(admin_id);
+            AdminVO admin = dashBoardMapper.admin_detail(admin_id);
             result.put("admin_name", admin.getName()); // 답변한 관리자 이름
         }
 
