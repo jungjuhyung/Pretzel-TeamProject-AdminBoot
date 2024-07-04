@@ -1,13 +1,13 @@
 package com.ict.pretzel_admin.ko.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ict.pretzel_admin.common.Paging;
 import com.ict.pretzel_admin.ko.mapper.MasterAdminMapper;
@@ -57,7 +57,11 @@ public class MasterAdminService {
 
         List<AdminVO> admin_list = masterAdminMapper.admin_list(paging);
 
-        return ResponseEntity.ok(admin_list);
+        Map<String, Object> result = new HashMap<>();
+        result.put("count", count);
+        result.put("admin_list", admin_list);
+
+        return ResponseEntity.ok(result);
     }
 
     // 관리자 추가
