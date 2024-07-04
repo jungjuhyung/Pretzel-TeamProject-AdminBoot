@@ -325,7 +325,7 @@ public class MovieController {
         try {
             List<MovieVO> movie_list = new ArrayList();
             int count = 0;
-            if (keyword == null) {
+            if (keyword == null || keyword.equals("")) {
                 movie_list = movieService.movie_list();
                 count = movieService.movie_count();
                 
