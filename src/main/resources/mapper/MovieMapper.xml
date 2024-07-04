@@ -50,7 +50,7 @@
   <select id="movie_list" resultType="MovieVO">
     select * from movies
     where status = 1
-    order by synchro
+    ORDER BY synchro ASC, insert_time DESC;
   </select>
   
   <update id="movie_synchro" parameterType="String">
@@ -63,15 +63,19 @@
     select * from movies
     where korea_title like CONCAT('%', #{keyword}, '%')
     or english_title like CONCAT('%', #{keyword}, '%')
+    and status = 1
+    ORDER BY synchro ASC, insert_time DESC;
   </select>
 
   <select id="search_count" parameterType="String" resultType="int">
     select count(*) from movies
     where korea_title like CONCAT('%', #{keyword}, '%')
     or english_title like CONCAT('%', #{keyword}, '%')
+    and status = 1
   </select>
   
   <select id="movie_count" resultType="int">
     select count(*) from movies
+    where status = 1
   </select>
 </mapper>
