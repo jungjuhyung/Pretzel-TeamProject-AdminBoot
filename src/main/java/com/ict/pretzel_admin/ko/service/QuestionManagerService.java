@@ -59,7 +59,12 @@ public class QuestionManagerService {
 			paging.setEndBlock(paging.getTotalPage());
 		}
 
-        List<QuestionVO> quest_list = questionManagerMapper.quest_list(paging);       
+        List<QuestionVO> quest_list = questionManagerMapper.quest_list(paging); 
+        for (QuestionVO k : quest_list) {
+            ProfileVO profile = userManagerMapper.profile_detail(k.getProfile_idx());
+            k.setUser_id(profile.getUser_id());
+            k.setName(profile.getName());
+        }      
         int quest_count = questionManagerMapper.quest_count();
 
         Map<String, Object> result = new HashMap<>();
