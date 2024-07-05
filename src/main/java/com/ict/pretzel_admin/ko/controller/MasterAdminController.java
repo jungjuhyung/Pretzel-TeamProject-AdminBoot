@@ -46,6 +46,12 @@ public class MasterAdminController {
         return masterAdminService.admin_quest(admin.getAdmin_id());
     }
 
+    // 관리자 상세
+    @PostMapping("/admin_detail")
+    public ResponseEntity<?> admin_detail(@RequestBody AdminVO admin) {
+        return masterAdminService.admin_detail(admin.getAdmin_id());
+    }
+
     // 관리자 수정
     @PostMapping("/admin_update")
     public ResponseEntity<?> admin_update(@RequestBody AdminVO admin) {

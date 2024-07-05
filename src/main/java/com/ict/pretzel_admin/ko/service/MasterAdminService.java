@@ -8,9 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.ict.pretzel_admin.common.Paging;
 import com.ict.pretzel_admin.ko.mapper.MasterAdminMapper;
+import com.ict.pretzel_admin.ko.mapper.DashBoardMapper;
 import com.ict.pretzel_admin.vo.AdminVO;
 import com.ict.pretzel_admin.vo.QuestionVO;
 import com.ict.pretzel_admin.vo.ReportVO;
@@ -92,12 +94,22 @@ public class MasterAdminService {
 
     // 관리자 수정
     public ResponseEntity<?> admin_update(AdminVO admin) {
-
+        
         int result = masterAdminMapper.admin_update(admin); 
-
+        
         return ResponseEntity.ok(result);
     }
+    
+    @Autowired
+    private DashBoardMapper dashBoardMapper;
 
+    // 관리자 상세
+    public ResponseEntity<?> admin_detail(String admin_id) {
 
+        AdminVO admin = dashBoardMapper.admin_detail(admin_id);
+
+        return ResponseEntity.ok(admin);
+    }
+    
     
 }
