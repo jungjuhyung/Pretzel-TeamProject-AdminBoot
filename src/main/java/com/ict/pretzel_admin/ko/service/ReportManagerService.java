@@ -9,8 +9,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.ict.pretzel_admin.common.Paging;
+import com.ict.pretzel_admin.ko.mapper.DashBoardMapper;
 import com.ict.pretzel_admin.ko.mapper.ReportManagerMapper;
 import com.ict.pretzel_admin.ko.mapper.UserManagerMapper;
+import com.ict.pretzel_admin.vo.AdminVO;
 import com.ict.pretzel_admin.vo.ProfileVO;
 import com.ict.pretzel_admin.vo.ReportVO;
 import com.ict.pretzel_admin.vo.ReviewVO;
@@ -23,6 +25,9 @@ public class ReportManagerService {
 
     @Autowired
     private UserManagerMapper userManagerMapper;
+
+     @Autowired
+    private DashBoardMapper dashBoardMapper;
 
     @Autowired
     private Paging paging;
@@ -56,6 +61,13 @@ public class ReportManagerService {
 		}
 
         List<ReportVO> report_list = reportManagerMapper.report_list(paging);
+        for (ReportVO k : report_list) {
+            if(k.getAdmin_id() != null){
+                AdminVO admin = dashBoardMapper.admin_detail(k.getAdmin_id());
+                k.setAdmin_name(admin.getName());
+            }
+        }
+
         int report_count = reportManagerMapper.report_count();
 
         Map<String, Object> result = new HashMap<>();
@@ -66,7 +78,7 @@ public class ReportManagerService {
     }
 
     // 신고 상세
-    public ResponseEntity<?> report_detail(String report_idx) {
+    public ResponseEntity<?> report_detail(String report_idx, String admin_id) {
         
         // 신고 정보(신고유형, 프로필idx, 리뷰idx)
         ReportVO report = reportManagerMapper.report_detail(report_idx);
@@ -81,10 +93,22 @@ public class ReportManagerService {
         ProfileVO reported_profile = userManagerMapper.profile_detail(reported_review.getProfile_idx());
         
         Map<String, Object> result = new HashMap<>();
+
+        // 답변한 관리자 아이디 -> 답변한 관리자(이름)
+        if (report.getAdmin_id() != null) {
+            AdminVO admin = dashBoardMapper.admin_detail(report.getAdmin_id());
+            result.put("admin_name", admin.getName()); // 답변한 관리자 이름
+        }else{
+            report.setAdmin_id(admin_id);
+            AdminVO admin = dashBoardMapper.admin_detail(admin_id);
+            result.put("admin_name", admin.getName()); // 현재 관리자 이름
+        }
+
         result.put("report", report); // 신고VO
         result.put("profile_name", report_profile.getName()); // 신고한 프로필
         result.put("user_id", reported_profile.getUser_id()); // 신고당한 유저
         result.put("content", reported_review.getContent()); // 리뷰 내용
+        result.put("movie_title", reported_review.getKorea_title()); // 리뷰쓴 영화
 
         return ResponseEntity.ok(result);
     }

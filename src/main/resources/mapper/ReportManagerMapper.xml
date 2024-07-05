@@ -12,8 +12,10 @@
 
   <!-- 신고 리스트 -->
   <select id="report_list" parameterType="Paging" resultType="ReportVO">
-    select * from reports 
-    order by status desc, report_idx
+    SELECT r.*, rev.content
+    FROM reports r
+    JOIN reviews rev ON r.review_idx = rev.review_idx
+    order by r.status desc, r.report_idx
     limit #{numPerPage} offset #{offset}
   </select>
 
@@ -29,7 +31,10 @@
 
   <!-- 신고당한 리뷰 -->
   <select id="reported_review" resultType="ReviewVO">
-    select * from reviews where review_idx = #{review_idx}
+    SELECT r.*, m.korea_title
+    FROM reviews r
+    JOIN movies m ON r.movie_idx = m.movie_idx
+    WHERE r.review_idx = #{review_idx}
   </select>
 
   <!-- 신고 처리 -->
