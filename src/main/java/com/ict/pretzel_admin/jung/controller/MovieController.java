@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,6 +28,7 @@ import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
+import com.ict.pretzel_admin.common.Paging;
 import com.ict.pretzel_admin.jung.service.MovieService;
 import com.ict.pretzel_admin.jung.tools.TMDBTools;
 import com.ict.pretzel_admin.jwt.JwtDecode;
@@ -320,17 +320,48 @@ public class MovieController {
             return ResponseEntity.ok(0);
         }
     }
+
+    @Autowired
+    private Paging paging;
+
     @GetMapping("/list_movie")
-    public ResponseEntity<?> list_movie(@RequestParam("keyword") String keyword) throws IOException {
+    public ResponseEntity<?> list_movie(@RequestParam("keyword") String keyword, 
+            @RequestParam(value = "cPage", defaultValue = "1") String cPage) throws IOException {
         try {
+            // 페이징 기법
+            int count = movieService.movie_count();
+            paging.setTotalRecord(count);
+
+            if (paging.getTotalRecord() <= paging.getNumPerPage()) {
+                paging.setTotalPage(1);
+            } else {
+                paging.setTotalPage(paging.getTotalRecord() / paging.getNumPerPage());
+                if (paging.getTotalRecord() % paging.getNumPerPage() != 0) {
+                    paging.setTotalPage(paging.getTotalPage() + 1);
+                }
+            }
+
+            paging.setNowPage(Integer.parseInt(cPage));
+
+            paging.setOffset(paging.getNumPerPage() * (paging.getNowPage() - 1));
+
+            paging.setBeginBlock((int) ((paging.getNowPage() - 1) 
+                    / paging.getPagePerBlock()) * paging.getPagePerBlock() + 1);
+
+            paging.setEndBlock(paging.getBeginBlock() + paging.getPagePerBlock() - 1);
+
+            if (paging.getEndBlock() > paging.getTotalPage()) {
+                paging.setEndBlock(paging.getTotalPage());
+            }
+
+            //  DB 갔다오기
             List<MovieVO> movie_list = new ArrayList();
-            int count = 0;
             if (keyword == null || keyword.equals("")) {
-                movie_list = movieService.movie_list();
-                count = movieService.movie_count();
+                movie_list = movieService.movie_list(paging);
                 
             }else {
-                movie_list = movieService.search_list(keyword);
+                paging.setKeyword(keyword);
+                movie_list = movieService.search_list(paging);
                 count = movieService.search_count(keyword);
             }
             Map<String, Object> result = new HashMap<>();

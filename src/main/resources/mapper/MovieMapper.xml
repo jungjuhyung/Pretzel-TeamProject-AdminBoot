@@ -47,10 +47,11 @@
     where movie_idx = #{movie_idx}
   </update>
   
-  <select id="movie_list" resultType="MovieVO">
+  <select id="movie_list" parameterType="Paging" resultType="MovieVO">
     select * from movies
     where status = 1
-    ORDER BY synchro ASC, insert_time DESC;
+    ORDER BY synchro ASC, insert_time DESC
+    limit #{numPerPage} offset #{offset}
   </select>
   
   <update id="movie_synchro" parameterType="String">
@@ -59,12 +60,13 @@
     where movie_idx = #{movie_idx}
   </update>
 
-  <select id="search_list" parameterType="String" resultType="MovieVO">
+  <select id="search_list" parameterType="Paging" resultType="MovieVO">
     select * from movies
     where korea_title like CONCAT('%', #{keyword}, '%')
     or english_title like CONCAT('%', #{keyword}, '%')
     and status = 1
-    ORDER BY synchro ASC, insert_time DESC;
+    ORDER BY synchro ASC, insert_time DESC
+    limit #{numPerPage} offset #{offset}
   </select>
 
   <select id="search_count" parameterType="String" resultType="int">

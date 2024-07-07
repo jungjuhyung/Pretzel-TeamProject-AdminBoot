@@ -114,11 +114,9 @@ public class ReportManagerService {
     }
 
     // 신고 처리
-    public ResponseEntity<?> report_ok(String admin_id, String report_idx) {
+    public ResponseEntity<?> report_ok(String admin_id, ReportVO report) {
 
-        ReportVO report = new ReportVO();
         report.setAdmin_id(admin_id);
-        report.setReport_idx(report_idx);
         int result = reportManagerMapper.report_ok(report);
 
         return ResponseEntity.ok(result);

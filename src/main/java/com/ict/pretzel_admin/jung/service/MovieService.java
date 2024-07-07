@@ -1,13 +1,15 @@
 package com.ict.pretzel_admin.jung.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ict.pretzel_admin.common.Paging;
 import com.ict.pretzel_admin.jung.mapper.MovieMapper;
 import com.ict.pretzel_admin.vo.CastVO;
 import com.ict.pretzel_admin.vo.CrewVO;
 import com.ict.pretzel_admin.vo.MovieVO;
-import java.util.List;
 
 @Service
 public class MovieService {
@@ -65,6 +67,13 @@ public class MovieService {
         }
         return null;
 	}
+    public List<MovieVO> movie_list(Paging paging) {
+        List<MovieVO> res = movieMapper.movie_list(paging);
+        if (res != null) {
+            return res;
+        }
+        return null;
+	}
     public int movie_synchro(String movie_idx) {
         int res = movieMapper.movie_synchro(movie_idx);
         if (res < 0) {
@@ -72,8 +81,8 @@ public class MovieService {
         }
         return 1;
     }
-    public List<MovieVO> search_list(String keyword) {
-        List<MovieVO> res = movieMapper.search_list(keyword);
+    public List<MovieVO> search_list(Paging paging) {
+        List<MovieVO> res = movieMapper.search_list(paging);
         if (res != null) {
             return res;
         }
