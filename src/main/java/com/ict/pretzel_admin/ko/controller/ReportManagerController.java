@@ -40,7 +40,7 @@ public class ReportManagerController {
     public ResponseEntity<?> report_ok(@RequestHeader("Authorization") String token, 
                                         @RequestBody ReportVO report) {
         JwtDecode jwtDecode = new JwtDecode(token);            
-        return reportManagerService.report_ok(jwtDecode.getAdmin_id(), report.getReport_idx());
+        return reportManagerService.report_ok(jwtDecode.getAdmin_id(), report);
     }
     
 
