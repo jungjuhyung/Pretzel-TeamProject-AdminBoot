@@ -366,7 +366,9 @@ public class MovieController {
             }
             Map<String, Object> result = new HashMap<>();
             result.put("movie_list", movie_list);
+            result.put("paging", paging);
             result.put("count", count);
+            
             return ResponseEntity.ok(result);
         } catch (Exception e) {
             System.out.println(e);
