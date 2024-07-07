@@ -8,11 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import com.ict.pretzel_admin.common.Paging;
-import com.ict.pretzel_admin.ko.mapper.MasterAdminMapper;
 import com.ict.pretzel_admin.ko.mapper.DashBoardMapper;
+import com.ict.pretzel_admin.ko.mapper.MasterAdminMapper;
 import com.ict.pretzel_admin.vo.AdminVO;
 import com.ict.pretzel_admin.vo.QuestionVO;
 import com.ict.pretzel_admin.vo.ReportVO;
@@ -61,6 +60,7 @@ public class MasterAdminService {
 
         Map<String, Object> result = new HashMap<>();
         result.put("count", count);
+        result.put("paging", paging);
         result.put("admin_list", admin_list);
 
         return ResponseEntity.ok(result);

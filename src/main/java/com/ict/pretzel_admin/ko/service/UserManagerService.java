@@ -60,6 +60,8 @@ public class UserManagerService {
         Map<String, Object> result = new HashMap<>();
         result.put("count", count);
         result.put("user_list", user_list);
+        result.put("paging", paging);
+        
         return ResponseEntity.ok(result);
     }
 

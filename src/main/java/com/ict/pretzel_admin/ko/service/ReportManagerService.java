@@ -73,6 +73,7 @@ public class ReportManagerService {
         Map<String, Object> result = new HashMap<>();
         result.put("report_list", report_list);
         result.put("count", report_count);
+        result.put("paging", paging);
 
         return ResponseEntity.ok(result);
     }

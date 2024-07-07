@@ -70,6 +70,7 @@ public class QuestionManagerService {
         Map<String, Object> result = new HashMap<>();
         result.put("quest_list", quest_list);
         result.put("count", quest_count);
+        result.put("paging", paging);
 
         return ResponseEntity.ok(result);
     }
