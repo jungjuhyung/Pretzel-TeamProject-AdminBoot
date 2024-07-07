@@ -155,13 +155,13 @@ public class TMDBTools {
 				for (int i = 0; i < video_infos.length(); i++) {
 					JSONObject video_info = video_infos.getJSONObject(i);
 					if (video_info.getString("type").equals("Official Trailer") && video_info.getString("site").equals("YouTube")) {
-						trailer = String.valueOf(video_info.get("id"));
+						trailer = String.valueOf(video_info.get("key"));
 						break;
 					}else if (video_info.getString("type").equals("Teaser Trailer") && video_info.getString("site").equals("YouTube")) {
-						trailer = String.valueOf(video_info.get("id"));
+						trailer = String.valueOf(video_info.get("key"));
 						continue;
 					}else if (video_info.getString("type").equals("Trailer") && video_info.getString("site").equals("YouTube")) {
-						trailer = String.valueOf(video_info.get("id"));
+						trailer = String.valueOf(video_info.get("key"));
 						continue;
 					}
 				}
