@@ -21,7 +21,7 @@
 
   <!-- 미처리 신고 개수 -->
   <select id="report_count" resultType="int">
-    select count(*) from reports where status = 1
+    select count(*) from reports where status = 2
   </select>
 
   <!-- 신고 상세 -->
@@ -40,9 +40,16 @@
   <!-- 신고 처리 -->
   <update id="report_ok" parameterType="ReportVO">
     update reports 
-    set status = #{status}, admin_id = #{admin_id} 
+    set status = #{status}, admin_id = #{admin_id}, ansdate = NOW()
     where report_idx = #{report_idx}
   </update>
 
+  <update id="review_delete" parameterType="ReportVO">
+    update reviews
+    set status = 0, admin_id = #{admin_id}
+    from reviews r
+    join reports rp on r.review_idx = rp.review_idx
+    where rp.report_idx = #{report_idx}
+</update>
 
 </mapper>
