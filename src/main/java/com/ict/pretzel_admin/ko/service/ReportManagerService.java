@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ict.pretzel_admin.common.Paging;
 import com.ict.pretzel_admin.ko.mapper.DashBoardMapper;
@@ -115,7 +116,13 @@ public class ReportManagerService {
     }
 
     // 신고 처리
+    @Transactional
     public ResponseEntity<?> report_ok(String admin_id, ReportVO report) {
+
+        // 처리할 때만 리뷰 삭제
+        if (report.getReview_idx().equals("0")) {
+            reportManagerMapper.review_delete(report);
+        }
 
         report.setAdmin_id(admin_id);
         int result = reportManagerMapper.report_ok(report);

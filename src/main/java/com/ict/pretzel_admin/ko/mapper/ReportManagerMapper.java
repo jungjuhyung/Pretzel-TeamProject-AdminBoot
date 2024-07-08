@@ -25,4 +25,6 @@ public interface ReportManagerMapper {
 
     int report_ok(ReportVO report);
 
+    void review_delete(ReportVO report);
+
 }
