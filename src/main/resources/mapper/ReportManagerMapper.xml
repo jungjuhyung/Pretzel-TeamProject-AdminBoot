@@ -45,11 +45,13 @@
   </update>
 
   <update id="review_delete" parameterType="ReportVO">
-    update reviews
-    set status = 0, admin_id = #{admin_id}
-    from reviews r
-    join reports rp on r.review_idx = rp.review_idx
-    where rp.report_idx = #{report_idx}
+    UPDATE reviews
+    SET status = 0, admin_id = #{admin_id}
+    WHERE review_idx = (
+        SELECT review_idx
+        FROM reports
+        WHERE report_idx = #{report_idx}
+    )
 </update>
 
 </mapper>
