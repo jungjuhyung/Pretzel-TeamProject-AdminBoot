@@ -120,7 +120,7 @@ public class ReportManagerService {
     public ResponseEntity<?> report_ok(String admin_id, ReportVO report) {
 
         // 처리할 때만 리뷰 삭제
-        if (report.getReview_idx().equals("0")) {
+        if (report.getStatus().equals("0")) {
             reportManagerMapper.review_delete(report);
         }
 
