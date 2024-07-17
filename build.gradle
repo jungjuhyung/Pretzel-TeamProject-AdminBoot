@@ -66,6 +66,9 @@ dependencies {
 	implementation 'com.googlecode.json-simple:json-simple:1.1.1'
 
 	implementation 'com.google.code.gson:gson:2.8.9'
+
+	// 구글 번역 API 추가
+    implementation 'com.google.cloud:google-cloud-translate:1.95.3' // 이기찬 구글 번역 API 의존성 추가
 }
 
 tasks.named('test') {

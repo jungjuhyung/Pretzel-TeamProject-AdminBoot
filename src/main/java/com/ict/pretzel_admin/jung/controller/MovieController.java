@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Arrays; // 이기찬 배열
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile; // 이기찬 멀티파트
 
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.storage.Blob;
@@ -37,6 +39,11 @@ import com.ict.pretzel_admin.vo.CrewVO;
 import com.ict.pretzel_admin.vo.MovieVO;
 
 import lombok.RequiredArgsConstructor;
+
+// 이기찬 구글 번역 API
+import com.google.cloud.translate.Translate; // 이기찬 구글 번역 api 
+import com.google.cloud.translate.TranslateOptions; // 이기찬 구글 번역 api 
+import com.google.cloud.translate.Translation; // 이기찬 구글 번역 api 
 
 @RestController
 @RequiredArgsConstructor
@@ -56,56 +63,50 @@ public class MovieController {
     private TMDBTools tmdbTools;
 
     @GetMapping("/search")
-	public ResponseEntity<?> search(@RequestParam("query") String query, @RequestParam("year") String year) {
-		try {
-			String encode_query = URLEncoder.encode(query, "UTF-8").replaceAll("\\+", "%20");
-			String encode_year = URLEncoder.encode(year, "UTF-8").replaceAll("\\+", "%20");
-			System.out.println(encode_query);
-			System.out.println("check"+encode_year);
-			String apiURL = "";
-			if (year.equals("")) {
-				apiURL = "https://api.themoviedb.org/3/search/movie?query="+encode_query+"&include_adult=true&language=ko-kr&language=en-US";
-			}else{
-				apiURL = "https://api.themoviedb.org/3/search/movie?query="+encode_query+"&primary_release_year="+encode_year+"&include_adult=true&language=ko-kr&language=en-US";
-			}
-			System.out.println(apiURL);
-			URL url = new URL(apiURL);
-			String api_key = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwYmE1OThkMzg4OTgwZjBlMTJjNmU1N2RkYjRmNjFlNyIsInN1YiI6IjY2NzEzMGNlNDA1YjNhMjk3MDZhYWFlNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.cT8hOciOWfO-qUWSh_fzqQzVburxqSAqwdXoaTgHz1E";
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			
-			conn.setRequestMethod("GET");
-			
-			conn.setRequestProperty("accept", "application/json");
-			conn.setRequestProperty("Authorization", "Bearer "+api_key);
-			int responeseCode = conn.getResponseCode();
-			System.out.println(responeseCode);
-			if(responeseCode == HttpURLConnection.HTTP_OK) {
-				BufferedReader br =
-						new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
-				String line ="";
-				StringBuffer sb = new StringBuffer();
-				while((line=br.readLine()) !=null) {
-					sb.append(line);
-				}
-				String result = sb.toString();
-				return ResponseEntity.ok(result);
-			}
-			
-		} catch (Exception e) {
-			System.out.println("연결 실패");
-		}
-		return ResponseEntity.ok(0);
-	}
+    public ResponseEntity<?> search(@RequestParam("query") String query, @RequestParam("year") String year) {
+        try {
+            String encode_query = URLEncoder.encode(query, "UTF-8").replaceAll("\\+", "%20");
+            String encode_year = URLEncoder.encode(year, "UTF-8").replaceAll("\\+", "%20");
+            String apiURL = "";
+            if (year.equals("")) {
+                apiURL = "https://api.themoviedb.org/3/search/movie?query=" + encode_query + "&include_adult=true&language=ko-kr&language=en-US";
+            } else {
+                apiURL = "https://api.themoviedb.org/3/search/movie?query=" + encode_query + "&primary_release_year=" + encode_year + "&include_adult=true&language=ko-kr&language=en-US";
+            }
+            URL url = new URL(apiURL);
+            String api_key = "your_api_key_here";
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
-	@PostMapping("/insert_movie")
-    public ResponseEntity<?> insert_movie(@RequestHeader("Authorization") String token, MovieVO movieVO) throws IOException {
+            conn.setRequestMethod("GET");
+
+            conn.setRequestProperty("accept", "application/json");
+            conn.setRequestProperty("Authorization", "Bearer " + api_key);
+            int responeseCode = conn.getResponseCode();
+            if (responeseCode == HttpURLConnection.HTTP_OK) {
+                BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+                String line = "";
+                StringBuffer sb = new StringBuffer();
+                while ((line = br.readLine()) != null) {
+                    sb.append(line);
+                }
+                String result = sb.toString();
+                return ResponseEntity.ok(result);
+            }
+
+        } catch (Exception e) {
+            System.out.println("연결 실패");
+        }
+        return ResponseEntity.ok(0);
+    }
+
+    @PostMapping("/insert_movie")
+    public ResponseEntity<?> insert_movie(@RequestHeader("Authorization") String token, MovieVO movieVO, @RequestParam("subtitle") MultipartFile subtitle) throws IOException { // 이기찬 리퀘스트파람 추가
         try {
             // 스토리지 생성
             GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream("src/main/resources/ict-pretzel-43373d904ced.json"));
             Storage storage = StorageOptions.newBuilder()
             .setCredentials(credentials)
             .setProjectId(id).build().getService();
-            System.out.println("1111");
             JwtDecode jwtDecode = new JwtDecode(token); 
             String movie_id = movieVO.getMovie_id();
             String storage_folder = "";
@@ -156,7 +157,11 @@ public class MovieController {
                     movieVO.getSubtitle().getInputStream());
                     movieVO.setSubtitle_url(storage_folder+subtitle_name);
                     movieVO.setSub_del_name(storage_folder+movieVO.getSubtitle().getOriginalFilename());
-                }
+
+                    // 자막 번역 및 업로드 (추가)
+                    Map<String, String> translatedFiles = translateAndUploadSubtitles(storage, bucketName, storage_folder, movieVO.getSubtitle()); // 이기찬 자막 번역 및 업로드 메소드 
+                    movieVO.setTranslated_subtitles(translatedFiles); // 이기찬 번역된 자막 파일의 URL을 무비브이오에 저장
+            }
                 
             Map<String, String> detail = tmdbTools.detail(movie_id);
             movieVO.setTmdb_title(detail.get("tmdb_title"));
@@ -185,7 +190,8 @@ public class MovieController {
             return ResponseEntity.ok(0);
         }
     }
-	@PostMapping("/update_movie")
+
+    @PostMapping("/update_movie")
     public ResponseEntity<?> update_movie(@RequestHeader("Authorization") String token, MovieVO movieVO) throws IOException {
         try {
             MovieVO movie_info = movieService.movie_info(movieVO.getMovie_idx());
@@ -255,6 +261,10 @@ public class MovieController {
                         movieVO.getSubtitle().getInputStream());
                         movieVO.setSubtitle_url(storage_folder+subtitle_name);
                         movieVO.setSub_del_name(storage_folder+movieVO.getSubtitle().getOriginalFilename());
+
+                        // 자막 번역 및 업로드 (추가)
+                        Map<String, String> translatedFiles = translateAndUploadSubtitles(storage, bucketName, storage_folder, movieVO.getSubtitle()); // 이기찬 자막 번역 및 업로드 메소드 호출
+                        movieVO.setTranslated_subtitles(translatedFiles); // 이기찬 번역된 자막 파일의 URL을 무비브이오에 저장
                 }
             }
             
@@ -277,6 +287,7 @@ public class MovieController {
             return ResponseEntity.ok(0);
         }
     }
+
     @GetMapping("/delete_movie")
     public ResponseEntity<?> delete_movie(@RequestHeader("Authorization") String token, @RequestParam("movie_idx") String movie_idx) throws IOException {
         try {
@@ -306,6 +317,7 @@ public class MovieController {
             return ResponseEntity.ok(0);
         }
     }
+
     @GetMapping("/synchro_movie")
     public ResponseEntity<?> synchro_movie(@RequestHeader("Authorization") String token) throws IOException {
         try {
@@ -359,7 +371,7 @@ public class MovieController {
             if (keyword == null || keyword.equals("")) {
                 movie_list = movieService.movie_list(paging);
                 
-            }else {
+            } else {
                 paging.setKeyword(keyword);
                 movie_list = movieService.search_list(paging);
                 count = movieService.search_count(keyword);
@@ -375,7 +387,58 @@ public class MovieController {
             return ResponseEntity.ok(0);
         }
     }
-    
-    
+
+    // 이기찬
+
+    // 자막 번역 및 업로드 메소드
+    private Map<String, String> translateAndUploadSubtitles(Storage storage, String bucketName, String storage_folder, MultipartFile subtitle) throws IOException { // 이기찬 자막 파일을 번역하고 구글스토리지에 업로드하는 메소드
+        Map<String, String> translatedFiles = new HashMap<>(); // 이기찬 번역된 파일의 URL을 저장할 맵
+        String subtitleContent = new String(subtitle.getBytes(), "UTF-8"); // 이기찬 자막 파일의 내용을 UTF-8 문자열로 읽기
+
+        List<String> languages = Arrays.asList("ko", "ja", "zh", "en", "fr", "de", "es", "it", "pt", "ru", "hi"); // 이기찬 번역할 언어 목록
+        for (String lang : languages) { // 이기찬 각 언어에 대해 번역 수행
+            String translatedContent = translateText(preprocessText(subtitleContent), lang); // 이기찬 텍스트 전처리 및 번역
+            translatedContent = postprocessText(translatedContent); // 이기찬 텍스트 후처리
+            String translatedFileName = subtitle.getOriginalFilename().replace(".srt", "_" + lang + ".vtt"); // 이기찬 번역된 파일의 이름 생성
+            BlobInfo blobInfo = storage.create( // 이기찬 번역된 파일을 스토리지에 업로드
+                BlobInfo.newBuilder(bucketName, storage_folder + translatedFileName).setContentType("text/vtt").build(), // 이기찬 BlobInfo 객체 생성
+                translatedContent.getBytes() // 이기찬 번역된 파일의 내용을 바이트 배열로 변환하여 업로드
+            ); // 이기찬
+            translatedFiles.put(lang, storage_folder + translatedFileName); // 이기찬 번역된 파일의 URL을 맵에 저장
+        } // 이기찬
+        return translatedFiles; // 이기찬 번역된 파일의 URL이 저장된 맵을 반환
+    } // 이기찬
+
+    // 텍스트 전처리 메소드 (추가)
+    private String preprocessText(String text) { // 이기찬 번역 전 텍스트를 전처리하는 메소드
+        text = text.replaceAll("\\[.*?\\]", "");  // 이기찬 
+        text = text.replaceAll("\\(.*?\\)", "");  // 이기찬 
+        text = text.replaceAll("\\{.*?\\}", "");  // 이기찬 
+        text = text.replaceAll("\\<.*?\\>", "");  // 이기찬 
+        text = text.strip();  // 이기찬 
+        return text;  // 이기찬 전처리된 텍스트 반환
+    } // 이기찬
+
+    // 텍스트 후처리 메소드 (추가)
+    private String postprocessText(String text) { // 이기찬 번역 후 텍스트를 후처리하는 메소드
+        text = text.replaceAll("\\s+", " ");  // 이기찬 여러 개의 공백을 하나의 공백으로 대체
+        text = text.strip();  // 이기찬 텍스트 양쪽 끝의 공백 제거
+        text = text.substring(0, 1).toUpperCase() + text.substring(1);  // 이기찬 첫 글자를 대문자로 변환
+        return text;  // 이기찬 후처리된 텍스트 반환
+    } // 이기찬
+
+    // 구글 번역 API를 사용한 번역 메소드 (추가)
+    private String translateText(String text, String targetLanguage) { // 이기찬 구글번역api를 사용하여 텍스트를 번역하는 메소드
+        if ("ko".equals(targetLanguage)) { // 타겟 언어가 한국어인 경우 번역 생략 
+            return text; // 이기찬
+        } // 이기찬
+        Translate translate = TranslateOptions.getDefaultInstance().getService(); // 번역 클라이언트 생성 
+        Translation translation = translate.translate( // 이기찬 번역 수행
+            text, // 이기찬 
+            Translate.TranslateOption.sourceLanguage("ko"), // 소스 언어 설정 
+            Translate.TranslateOption.targetLanguage(targetLanguage), // 타겟 언어 설정 
+            Translate.TranslateOption.format("text") //  텍스트 형식 설정
+        ); // 이기찬
+        return translation.getTranslatedText(); // 번역된 텍스트 반환 
+    } // 이기찬
 }
-            
