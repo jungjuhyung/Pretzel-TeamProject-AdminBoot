@@ -6,6 +6,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,9 +21,8 @@ import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
-import com.ict.pretzel_admin.jwt.JwtDecode;
-import com.ict.pretzel_admin.vo.CastVO;
-import com.ict.pretzel_admin.vo.CrewVO;
+import com.ict.pretzel_admin.lee.translateTool.TranslateTool;
+import com.ict.pretzel_admin.lee.translateTool.TranslateTool_kr;
 import com.ict.pretzel_admin.vo.MovieVO;
 
 import io.jsonwebtoken.io.IOException;
@@ -39,6 +39,11 @@ public class TestController {
 
     @Value("${spring.cloud.gcp.storage.project-id}") // application.properties에 써둔 bucket 이름
     private String id;
+
+	@Autowired
+    private TranslateTool translateTool;
+	@Autowired
+    private TranslateTool_kr translateTool_kr;
 
 	@GetMapping("/search")
 	public ResponseEntity<?> search(@RequestParam("query") String query, @RequestParam("year") String year) {
@@ -317,6 +322,47 @@ public class TestController {
 				.setContentType(subtitle_ext)
 				.build(),
 				movieVO.getSubtitle().getInputStream());
+			translateTool.translateAndUploadSubtitles(storage, bucketName, storage_folder, movieVO.getSubtitle());
+            return ResponseEntity.ok(1);
+        } catch (Exception e) {
+            return ResponseEntity.ok(0);
+        }
+    }
+	@GetMapping("/insert_korea_subtitle")
+    public ResponseEntity<?> insert_korea_subtitle(MovieVO movieVO) throws IOException {
+        try {
+            // 스토리지 생성
+            GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream("src/main/resources/ict-pretzel-43373d904ced.json"));
+            Storage storage = StorageOptions.newBuilder()
+            .setCredentials(credentials)
+            .setProjectId(id).build().getService();
+            
+            String storage_folder = "";
+            switch (movieVO.getThema()) {
+                case "로맨스":
+                storage_folder = "pretzel-romance/";
+                break;
+                case "코믹":
+                storage_folder = "pretzel-comic/";
+                break;
+                case "범죄/스릴러":
+                storage_folder = "pretzel-crime/";
+                break;
+                case "액션":
+                storage_folder = "pretzel-action/";
+                break;
+                case "애니메이션":
+                storage_folder = "pretzel-ani/";
+                break;
+                case "공포":
+                storage_folder = "pretzel-horror/";
+                break;
+                default:
+                break;
+            }
+            
+            // Cloud에 한글 자막만 업로드
+			translateTool_kr.translateAndUploadSubtitles(storage, bucketName, storage_folder, movieVO.getSubtitle());
             return ResponseEntity.ok(1);
         } catch (Exception e) {
             return ResponseEntity.ok(0);
