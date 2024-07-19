@@ -7,10 +7,10 @@
   
   <insert id="movie_insert" parameterType="MovieVO">
     INSERT INTO movies (movie_id, tmdb_title, korea_title, english_title, thema,
-    synopsis, movie_url, subtitle_url,trailer_url,poster_url,backdrop_url,movie_grade,runtime,
-    release_date,insert_time,admin_id,movie_del_name,sub_del_name)
-    VALUES (#{movie_id},#{tmdb_title},#{korea_title},#{english_title},#{thema},#{synopsis},#{movie_url},#{subtitle_url},
-    #{trailer_url},#{poster_url},#{backdrop_url},#{movie_grade},#{runtime},#{release_date},sysdate(),#{admin_id},#{movie_del_name},#{sub_del_name})
+    synopsis, movie_url, storage_name,trailer_url,poster_url,backdrop_url,movie_grade,runtime,
+    release_date,insert_time,admin_id)
+    VALUES (#{movie_id},#{tmdb_title},#{korea_title},#{english_title},#{thema},#{synopsis},#{movie_url},#{storage_name},
+    #{trailer_url},#{poster_url},#{backdrop_url},#{movie_grade},#{runtime},#{release_date},sysdate(),#{admin_id})
   </insert>
 
   <insert id="cast_insert" parameterType="CastVO">
@@ -36,8 +36,8 @@
   <update id="movie_update" parameterType="MovieVO">
     update movies 
     set movie_id=#{movie_id}, tmdb_title=#{tmdb_title}, korea_title=#{korea_title}, english_title=#{english_title}, thema=#{thema},
-    synopsis=#{synopsis}, movie_url=#{movie_url}, subtitle_url=#{subtitle_url},trailer_url=#{trailer_url},poster_url=#{poster_url},backdrop_url=#{backdrop_url},
-    movie_grade=#{movie_grade},runtime=#{runtime},release_date=#{release_date},update_time=sysdate(),admin_id=#{admin_id},movie_del_name=#{movie_del_name},sub_del_name=#{sub_del_name},synchro=#{synchro}
+    synopsis=#{synopsis}, movie_url=#{movie_url}, storage_name=#{storage_name},trailer_url=#{trailer_url},poster_url=#{poster_url},backdrop_url=#{backdrop_url},
+    movie_grade=#{movie_grade},runtime=#{runtime},release_date=#{release_date},update_time=sysdate(),admin_id=#{admin_id} ,synchro=#{synchro}
     where movie_idx = #{movie_idx}
   </update>
 
