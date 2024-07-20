@@ -132,20 +132,19 @@ public class MovieController {
             }
             
             String video_ext = movieVO.getMovie().getContentType(); // 파일의 형식 ex) JPG
-            String video_name = URLEncoder.encode(movieVO.getMovie().getOriginalFilename(), "UTF-8").replaceAll("\\+", "%20");
             // Cloud에 비디오 업로드
             BlobInfo blobVideoInfo = storage.createFrom(
                 BlobInfo.newBuilder(bucketName, storage_folder+movieVO.getMovie().getOriginalFilename())
                 .setContentType(video_ext)
                 .build(),
                 movieVO.getMovie().getInputStream());
+                String video_name = movieVO.getMovie().getOriginalFilename().replace(".mp4", "");
                 movieVO.setMovie_url(storage_folder+video_name);
-                movieVO.setStorage_name(movieVO.getMovie().getOriginalFilename().replace(".mp4", "" ));
+                movieVO.setStorage_name(video_name);
 
             // Cloud에 자막 업로드
             if (movieVO.getSubtitle() != null) {
                 String subtitle_ext = movieVO.getSubtitle().getContentType();
-                String subtitle_name = URLEncoder.encode(movieVO.getSubtitle().getOriginalFilename(), "UTF-8").replaceAll("\\+", "%20");
                 BlobInfo blobSubtitleInfo = storage.createFrom(
                     BlobInfo.newBuilder(bucketName, storage_folder+movieVO.getSubtitle().getOriginalFilename())
                     .setContentType(subtitle_ext)
@@ -196,15 +195,21 @@ public class MovieController {
                 .setCredentials(credentials)
                 .setProjectId(id).build().getService();
                 // 영화 파일 삭제
-                Blob blob = storage.get(bucketName, movie_info.getMovie_url());
+                Blob blob = storage.get(bucketName, movie_info.getMovie_url()+".mp4");
                 BlobId blobId = blob.getBlobId();
                 boolean deleted = storage.delete(blobId);
-                // 자막 파일 삭제
+
+                // 원본 .srt자막 파일 삭제
+                Blob srt_blob = storage.get(bucketName, movie_info.getMovie_url()+".srt");
+                BlobId srt_blobId = srt_blob.getBlobId();
+                boolean srt_deleted = storage.delete(srt_blobId);
+
+                // 번역 .vtt자막 파일 삭제
                 List<String> languages = Arrays.asList("ko", "ja", "zh", "en", "fr", "de", "es", "it", "pt", "ru", "hi");
                 for (String k : languages) {
-                    Blob sub_blob = storage.get(bucketName, movie_info.getStorage_name()+"_"+k+".vtt");
-                    BlobId sub_blobId = sub_blob.getBlobId();
-                    boolean sub_deleted = storage.delete(sub_blobId);
+                    Blob vtt_blob = storage.get(bucketName, movie_info.getMovie_url()+"_"+k+".vtt");
+                    BlobId vtt_blobId = vtt_blob.getBlobId();
+                    boolean vtt_deleted = storage.delete(vtt_blobId);
                 }
                 
                 // 새로운 영화 및 자막 업데이트
@@ -233,22 +238,21 @@ public class MovieController {
                 }
                 
                 String video_ext = movieVO.getMovie().getContentType(); // 파일의 형식 ex) JPG
-                String video_name = URLEncoder.encode(movieVO.getMovie().getOriginalFilename(), "UTF-8").replaceAll("\\+", "%20");
                 // Cloud에 비디오 업로드
                 BlobInfo blobVideoInfo = storage.createFrom(
-                    BlobInfo.newBuilder(bucketName, storage_folder+video_name)
+                    BlobInfo.newBuilder(bucketName, storage_folder+movieVO.getMovie().getOriginalFilename())
                     .setContentType(video_ext)
                     .build(),
                     movieVO.getMovie().getInputStream());
+                    String video_name = movieVO.getMovie().getOriginalFilename().replace(".mp4", "");
                     movieVO.setMovie_url(storage_folder+video_name);
-                    movieVO.setStorage_name(movieVO.getMovie().getOriginalFilename().replace(".mp4", "" ));
-
+                    movieVO.setStorage_name(video_name);
+                    
                 // Cloud에 자막 업로드
                 if (movieVO.getSubtitle() != null) {
                     String subtitle_ext = movieVO.getSubtitle().getContentType();
-                    String subtitle_name = URLEncoder.encode(movieVO.getSubtitle().getOriginalFilename(), "UTF-8").replaceAll("\\+", "%20");
                     BlobInfo blobSubtitleInfo = storage.createFrom(
-                        BlobInfo.newBuilder(bucketName, storage_folder+subtitle_name)
+                        BlobInfo.newBuilder(bucketName, storage_folder+movieVO.getSubtitle().getOriginalFilename())
                         .setContentType(subtitle_ext)
                         .build(),
                         movieVO.getSubtitle().getInputStream());
@@ -288,16 +292,22 @@ public class MovieController {
             .setCredentials(credentials)
             .setProjectId(id).build().getService();
             // 영화 파일 삭제
-            Blob blob = storage.get(bucketName, movie_info.getMovie_url());
+            Blob blob = storage.get(bucketName, movie_info.getMovie_url()+".mp4");
             BlobId blobId = blob.getBlobId();
             boolean deleted = storage.delete(blobId);
-            // 자막 파일 삭제
-            List<String> languages = Arrays.asList("ko", "ja", "zh", "en", "fr", "de", "es", "it", "pt", "ru", "hi");
-            for (String k : languages) {
-                Blob sub_blob = storage.get(bucketName, movie_info.getStorage_name()+"_"+k+".vtt");
-                BlobId sub_blobId = sub_blob.getBlobId();
-                boolean sub_deleted = storage.delete(sub_blobId);
-            }
+
+           // 원본 .srt자막 파일 삭제
+           Blob srt_blob = storage.get(bucketName, movie_info.getMovie_url()+".srt");
+           BlobId srt_blobId = srt_blob.getBlobId();
+           boolean srt_deleted = storage.delete(srt_blobId);
+
+           // 번역 .vtt자막 파일 삭제
+           List<String> languages = Arrays.asList("ko", "ja", "zh", "en", "fr", "de", "es", "it", "pt", "ru", "hi");
+           for (String k : languages) {
+               Blob vtt_blob = storage.get(bucketName, movie_info.getMovie_url()+"_"+k+".vtt");
+               BlobId vtt_blobId = vtt_blob.getBlobId();
+               boolean vtt_deleted = storage.delete(vtt_blobId);
+           }
 
             MovieVO movieVO = new MovieVO();
             movieVO.setMovie_idx(movie_idx);
