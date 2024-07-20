@@ -46,6 +46,10 @@ public class TranslateTool_kr {
         // 파일 내용 문자열을 얻는다
         String content = contentBuffer.toString();
 
+        if (content.startsWith("\uFEFF")) {
+            content = content.substring(1);
+        }
+
         // 자막 블록으로 나누기 (빈 줄로 구분)
         String[] subs = content.split("\n\n");
         System.out.println(subs[0]);
@@ -77,7 +81,7 @@ public class TranslateTool_kr {
             //번역된 파일을 스토리지에 업로드
 			BlobInfo blobInfo = storage.create(
                 BlobInfo.newBuilder(bucketName, storage_folder + translatedFileName).setContentType("application/octet-stream").build(),
-                res.getBytes() // 번역된 파일의 내용을 바이트 배열로 변환하여 업로드
+                res.getBytes(StandardCharsets.UTF_8) // 번역된 파일의 내용을 바이트 배열로 변환하여 업로드
                 );
             System.out.println(lang + " 번역 파일 스토리지 업로드 완료");
         }
