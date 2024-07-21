@@ -72,7 +72,7 @@ public class MovieController {
                 apiURL = "https://api.themoviedb.org/3/search/movie?query=" + encode_query + "&primary_release_year=" + encode_year + "&include_adult=true&language=ko-kr&language=en-US";
             }
             URL url = new URL(apiURL);
-            String api_key = "your_api_key_here";
+            String api_key = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwYmE1OThkMzg4OTgwZjBlMTJjNmU1N2RkYjRmNjFlNyIsInN1YiI6IjY2NzEzMGNlNDA1YjNhMjk3MDZhYWFlNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.cT8hOciOWfO-qUWSh_fzqQzVburxqSAqwdXoaTgHz1E";
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
             conn.setRequestMethod("GET");
