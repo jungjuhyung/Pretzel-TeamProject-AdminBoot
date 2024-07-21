@@ -400,5 +400,27 @@ public class MovieController {
 			return ResponseEntity.ok("0");
 		}
 	}
+    @GetMapping("/emotion_insert")
+	public ResponseEntity<?> emotion_insert(@RequestParam("movie_idx") String movie_idx) {
+		try {
+			int result = movieService.emotion_insert(movie_idx);
+			return ResponseEntity.ok(result);
+			
+		} catch (Exception e) {
+			System.out.println(e);
+			return ResponseEntity.ok("0");
+		}
+	}
+    @GetMapping("/deepface_insert")
+	public ResponseEntity<?> deepface_insert(@RequestParam("movie_idx") String movie_idx) {
+		try {
+			int result = movieService.deepface_insert(movie_idx);
+			return ResponseEntity.ok(result);
+			
+		} catch (Exception e) {
+			System.out.println(e);
+			return ResponseEntity.ok("0");
+		}
+	}
 
 }

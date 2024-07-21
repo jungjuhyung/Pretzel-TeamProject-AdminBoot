@@ -89,4 +89,17 @@
     limit 5
   </select>
 
+  <update id="emotion_insert" parameterType="String">
+    update movies 
+    set ai_emotion_syc=sysdate()
+    where movie_idx = #{movie_idx}
+  </update>
+  
+  <update id="deepface_insert" parameterType="String">
+    update movies 
+    set ai_deep_syc=sysdate()
+    where movie_idx = #{movie_idx}
+  </update>
+
+
 </mapper>

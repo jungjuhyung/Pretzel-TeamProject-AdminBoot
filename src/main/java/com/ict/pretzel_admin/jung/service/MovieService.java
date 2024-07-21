@@ -109,4 +109,18 @@ public class MovieService {
         }
         return null;
 	}
+    public int emotion_insert(String movie_idx) {
+        int result = movieMapper.emotion_insert(movie_idx);
+        if (result > 0) {
+            return result;
+        }
+        return 0;
+	}
+    public int deepface_insert(String movie_idx) {
+        int result = movieMapper.deepface_insert(movie_idx);
+        if (result > 0) {
+            return result;
+        }
+        return 0;
+	}
 }

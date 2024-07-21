@@ -24,4 +24,6 @@ public interface MovieMapper {
     int search_count(String keyword);
     int movie_count();
     List<CastVO> cast_list(String movie_idx);
+    int emotion_insert(String movie_idx);
+    int deepface_insert(String movie_idx);
 }
