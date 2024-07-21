@@ -23,4 +23,5 @@ public interface MovieMapper {
     List<MovieVO> search_list(Paging paging);
     int search_count(String keyword);
     int movie_count();
+    List<CastVO> cast_list(String movie_idx);
 }

@@ -389,4 +389,16 @@ public class MovieController {
             return ResponseEntity.ok(0);
         }
     }
+    @GetMapping("/cast_list")
+	public ResponseEntity<?> cast_list(@RequestParam("movie_idx") String movie_idx) {
+		try {
+			List<CastVO> result = movieService.cast_list(movie_idx);
+			return ResponseEntity.ok(result);
+			
+		} catch (Exception e) {
+			System.out.println(e);
+			return ResponseEntity.ok("0");
+		}
+	}
+
 }

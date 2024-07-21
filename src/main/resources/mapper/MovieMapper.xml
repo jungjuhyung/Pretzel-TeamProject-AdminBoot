@@ -80,4 +80,13 @@
     select count(*) from movies
     where status = 1
   </select>
+
+  <select id="cast_list" parameterType="String" resultType="CastVO">
+    select * 
+    from casts
+    where movie_idx = #{movie_idx}
+    order by orders ASC
+    limit 5
+  </select>
+
 </mapper>

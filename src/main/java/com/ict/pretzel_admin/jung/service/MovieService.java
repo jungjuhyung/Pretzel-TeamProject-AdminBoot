@@ -102,4 +102,11 @@ public class MovieService {
         }
         return res;
     }
+    public List<CastVO> cast_list(String movie_idx) {
+        List<CastVO> result = movieMapper.cast_list(movie_idx);
+        if (result != null) {
+            return result;
+        }
+        return null;
+	}
 }
