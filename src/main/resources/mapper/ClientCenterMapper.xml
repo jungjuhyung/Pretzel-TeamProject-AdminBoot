@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.ict.pretzel_admin.jung.mapper.ClientCenterMapper">
+  
+  <select id="notice_count" resultType="int">
+    select count(*) from notices
+    where status = 1
+  </select>
+
+  <select id="faq_count" resultType="int">
+    select count(*) from faqs
+    where status = 1
+  </select>
+  
+  <select id="notice_list" parameterType="Paging" resultType="NoticeVO">
+    select * from notices
+    where status = 1
+    ORDER BY regdate DESC
+    limit #{numPerPage} offset #{offset}
+  </select>
+
+  <select id="faq_list" parameterType="Paging" resultType="FaqVO">
+    select * from faqs
+    where status = 1
+    ORDER BY regdate DESC
+    limit #{numPerPage} offset #{offset}
+  </select>
+
+  <insert id="notice_insert" parameterType="NoticeVO">
+    INSERT INTO notices (title, content, regdate, insert_admin_id) 
+    VALUES (#{title}, #{content}, sysdate(), #{insert_admin_id})
+  </insert>
+
+  <update id="notice_delete" parameterType="String">
+    update notices 
+    set status=0, delete_admin_id=#{delete_admin_id}, delete_date=sysdate()
+    where notice_idx = #{notice_idx}
+  </update>
+
+  <insert id="faq_insert" parameterType="FaqVO">
+    INSERT INTO faqs (title, type, content, regdate, insert_admin_id) 
+    VALUES (#{title}, #{type}, #{content}, sysdate(), #{insert_admin_id})
+  </insert>
+
+  <update id="faq_delete" parameterType="String">
+    update faqs 
+    set status=0, delete_admin_id=#{delete_admin_id}, delete_date=sysdate()
+    where faq_idx = #{faq_idx}
+  </update>
+</mapper>

@@ -39,8 +39,6 @@ public class UserManagerService {
 			}
 		}
 
-        paging.setNumPerPage(8);
-
 		paging.setNowPage(Integer.parseInt(cPage));
 
 		paging.setOffset(paging.getNumPerPage() * (paging.getNowPage() - 1));
