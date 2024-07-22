@@ -47,6 +47,11 @@
     where movie_idx = #{movie_idx}
   </update>
   
+  <select id="synchro_list"  resultType="MovieVO">
+    select * from movies
+    where status = 1
+  </select>
+
   <select id="movie_list" parameterType="Paging" resultType="MovieVO">
     select * from movies
     where status = 1

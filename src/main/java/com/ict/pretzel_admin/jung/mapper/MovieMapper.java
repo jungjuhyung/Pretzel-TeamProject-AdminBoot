@@ -17,7 +17,7 @@ public interface MovieMapper {
     MovieVO movie_info(String movie_idx);
     int movie_update(MovieVO movieVO);
     int movie_delete(MovieVO movieVO);
-    List<MovieVO> movie_list();
+    List<MovieVO> synchro_list();
     List<MovieVO> movie_list(Paging paging);
     int movie_synchro(String movie_idx);
     List<MovieVO> search_list(Paging paging);

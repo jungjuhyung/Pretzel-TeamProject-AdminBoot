@@ -323,9 +323,11 @@ public class MovieController {
     @GetMapping("/synchro_movie")
     public ResponseEntity<?> synchro_movie(@RequestHeader("Authorization") String token) throws IOException {
         try {
-            List<MovieVO> movie_list = movieService.movie_list();
+            List<MovieVO> movie_list = movieService.synchro_list();
+            System.out.println("1");
             for (MovieVO k : movie_list) {
                 if (!tmdbTools.detail(k.getMovie_id()).get("tmdb_title").equalsIgnoreCase(k.getTmdb_title())) {
+                    System.out.println("싱크로 영역");
                     movieService.movie_synchro(k.getMovie_idx());
                 }
             }

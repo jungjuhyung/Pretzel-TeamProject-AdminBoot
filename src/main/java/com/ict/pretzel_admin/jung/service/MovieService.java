@@ -60,8 +60,8 @@ public class MovieService {
         }
         return 1;
 	}
-    public List<MovieVO> movie_list() {
-        List<MovieVO> res = movieMapper.movie_list();
+    public List<MovieVO> synchro_list() {
+        List<MovieVO> res = movieMapper.synchro_list();
         if (res != null) {
             return res;
         }
