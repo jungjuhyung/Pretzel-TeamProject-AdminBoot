@@ -343,7 +343,12 @@ public class MovieController {
             @RequestParam(value = "cPage", defaultValue = "1") String cPage) throws IOException {
         try {
             // 페이징 기법
-            int count = movieService.movie_count();
+            int count;
+            if (keyword == null || keyword.equals("")) {
+                count = movieService.movie_count();
+            }else {
+                count = movieService.search_count(keyword);
+            }
             paging.setTotalRecord(count);
 
             if (paging.getTotalRecord() <= paging.getNumPerPage()) {
@@ -376,7 +381,6 @@ public class MovieController {
             } else {
                 paging.setKeyword(keyword);
                 movie_list = movieService.search_list(paging);
-                count = movieService.search_count(keyword);
             }
             Map<String, Object> result = new HashMap<>();
             result.put("movie_list", movie_list);
