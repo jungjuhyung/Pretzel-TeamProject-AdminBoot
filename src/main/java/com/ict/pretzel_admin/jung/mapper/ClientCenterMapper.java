@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import com.ict.pretzel_admin.common.Paging;
 import com.ict.pretzel_admin.vo.FaqVO;
 import com.ict.pretzel_admin.vo.NoticeVO;
-
+import java.util.Map;
 
 
 @Mapper
@@ -17,8 +17,8 @@ public interface ClientCenterMapper {
     List<NoticeVO> notice_list(Paging paging);
     List<FaqVO> faq_list(Paging paging);
     int notice_insert(NoticeVO noticeVO);
-    int notice_delete(String delete_admin_id, String notice_idx);
+    int notice_delete(Map<String, Object> info);
     int faq_insert(FaqVO faqVO);
-    int faq_delete(String delete_admin_id, String faq_idx);
+    int faq_delete(Map<String, Object> info);
 
 }

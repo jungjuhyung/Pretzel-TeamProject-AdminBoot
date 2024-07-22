@@ -6,6 +6,7 @@ import com.ict.pretzel_admin.common.Paging;
 import com.ict.pretzel_admin.jung.mapper.ClientCenterMapper;
 import com.ict.pretzel_admin.vo.FaqVO;
 import com.ict.pretzel_admin.vo.NoticeVO;
+import java.util.Map;
 
 import java.util.List;
 
@@ -50,8 +51,8 @@ public class ClientCenterService {
         }
         return res;
 	}
-    public int notice_delete(String delete_admin_id, String notice_idx) {
-        int res = clientCenterMapper.notice_delete(delete_admin_id, notice_idx);
+    public int notice_delete(Map<String, Object> info) {
+        int res = clientCenterMapper.notice_delete(info);
         if (res < 0) {
             return 0;
         }
@@ -64,8 +65,8 @@ public class ClientCenterService {
         }
         return res;
 	}
-    public int faq_delete(String delete_admin_id, String faq_idx) {
-        int res = clientCenterMapper.faq_delete(delete_admin_id, faq_idx);
+    public int faq_delete(Map<String, Object> info) {
+        int res = clientCenterMapper.faq_delete(info);
         if (res < 0) {
             return 0;
         }

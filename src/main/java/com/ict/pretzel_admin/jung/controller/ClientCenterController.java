@@ -146,7 +146,10 @@ public class ClientCenterController {
 		try {
 			JwtDecode jwtDecode = new JwtDecode(token);
 			String delete_admin_id = jwtDecode.getAdmin_id();
-			int result = clientCenterService.notice_delete(delete_admin_id, notice_idx);
+            Map<String, Object> info = new HashMap<>();
+            info.put("delete_admin_id", delete_admin_id);
+            info.put("notice_idx", notice_idx);
+			int result = clientCenterService.notice_delete(info);
 			return ResponseEntity.ok(result);
 			
 		} catch (Exception e) {
@@ -173,7 +176,10 @@ public class ClientCenterController {
 		try {
 			JwtDecode jwtDecode = new JwtDecode(token);
 			String delete_admin_id = jwtDecode.getAdmin_id();
-			int result = clientCenterService.faq_delete(delete_admin_id, faq_idx);
+            Map<String, Object> info = new HashMap<>();
+            info.put("delete_admin_id", delete_admin_id);
+            info.put("faq_idx", faq_idx);
+			int result = clientCenterService.faq_delete(info);
 			return ResponseEntity.ok(result);
 			
 		} catch (Exception e) {

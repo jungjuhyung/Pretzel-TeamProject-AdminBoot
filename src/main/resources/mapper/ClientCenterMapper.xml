@@ -34,7 +34,7 @@
     VALUES (#{title}, #{content}, sysdate(), #{insert_admin_id})
   </insert>
 
-  <update id="notice_delete" parameterType="String">
+  <update id="notice_delete" parameterType="Map">
     update notices 
     set status=0, delete_admin_id=#{delete_admin_id}, delete_date=sysdate()
     where notice_idx = #{notice_idx}
@@ -45,7 +45,7 @@
     VALUES (#{title}, #{type}, #{content}, sysdate(), #{insert_admin_id})
   </insert>
 
-  <update id="faq_delete" parameterType="String">
+  <update id="faq_delete" parameterType="Map">
     update faqs 
     set status=0, delete_admin_id=#{delete_admin_id}, delete_date=sysdate()
     where faq_idx = #{faq_idx}
