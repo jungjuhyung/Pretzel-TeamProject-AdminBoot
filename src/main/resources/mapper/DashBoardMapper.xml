@@ -7,7 +7,7 @@
 
   <!-- 로그인(관리자상세) -->
   <select id="admin_detail" resultType="AdminVO">
-    select * from admins where admin_id = #{admin_id}
+    select * from admins where admin_id = #{admin_id} and status = 1
   </select>
 
   <!-- 구독별 카운트 -->
