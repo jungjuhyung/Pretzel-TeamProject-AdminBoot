@@ -44,7 +44,6 @@ public class TMDBTools {
 					sb.append(line);
 				}
 				String result = sb.toString();
-				System.out.println(result);
                 // JSON 파싱
 				Map<String, String> map = new HashMap<String, String>();
 
@@ -54,8 +53,6 @@ public class TMDBTools {
                 String backdrop_url = String.valueOf(jsonObject.get("backdrop_path"));
                 String runtime = String.valueOf(jsonObject.get("runtime"));
                 String release_date = String.valueOf(jsonObject.get("release_date"));
-				System.out.println(poster_url);
-				System.out.println(backdrop_url);
 				
 				map.put("tmdb_title", tmdb_title);
 				map.put("poster_url", poster_url);

@@ -61,7 +61,8 @@ public class MovieController {
     private TranslateTool translateTool;
 
     @GetMapping("/search")
-    public ResponseEntity<?> search(@RequestParam("query") String query, @RequestParam("year") String year) {
+    public ResponseEntity<?> search(@RequestParam("query") String query, 
+    @RequestParam("year") String year) {
         try {
             String encode_query = URLEncoder.encode(query, "UTF-8").replaceAll("\\+", "%20");
             String encode_year = URLEncoder.encode(year, "UTF-8").replaceAll("\\+", "%20");
@@ -324,10 +325,8 @@ public class MovieController {
     public ResponseEntity<?> synchro_movie(@RequestHeader("Authorization") String token) throws IOException {
         try {
             List<MovieVO> movie_list = movieService.synchro_list();
-            System.out.println("1");
             for (MovieVO k : movie_list) {
                 if (!tmdbTools.detail(k.getMovie_id()).get("tmdb_title").equalsIgnoreCase(k.getTmdb_title())) {
-                    System.out.println("싱크로 영역");
                     movieService.movie_synchro(k.getMovie_idx());
                 }
             }

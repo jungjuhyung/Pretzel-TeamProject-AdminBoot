@@ -32,7 +32,8 @@ public class TranslateTool {
     private String id;
 
     // 자막 번역 및 업로드 메소드
-    public void translateAndUploadSubtitles(Storage storage, String bucketName, String storage_folder, MultipartFile subtitle) throws IOException, UnsupportedEncodingException, java.io.IOException {
+    public void translateAndUploadSubtitles(Storage storage, String bucketName, String storage_folder, 
+    MultipartFile subtitle) throws IOException, UnsupportedEncodingException, java.io.IOException {
         // MultipartFile에서 InputStream을 얻어와서 문자열에 익숙한 BufferedReader로 받기
         BufferedReader srt_file = new BufferedReader(new InputStreamReader(subtitle.getInputStream(), StandardCharsets.UTF_8));
 
@@ -52,7 +53,6 @@ public class TranslateTool {
 
         // 자막 블록으로 나누기 (빈 줄로 구분)
         String[] subs = content.split("\n\n");
-        System.out.println(subs[0]);
 		
 		// 번역할 언어 목록
         List<String> languages = Arrays.asList("ko", "ja", "zh", "en", "fr", "de", "es", "it", "pt", "ru", "hi");
