@@ -21,7 +21,6 @@ public class TMDBTools {
 
 	public Map<String, String> detail(String movie_id) {
 		try {
-			System.out.println(movie_id);
 			String apiURL = "https://api.themoviedb.org/3/movie/"+movie_id+"?language=ko-kr&language=en-US";
 			String api_key = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwYmE1OThkMzg4OTgwZjBlMTJjNmU1N2RkYjRmNjFlNyIsInN1YiI6IjY2NzEzMGNlNDA1YjNhMjk3MDZhYWFlNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.cT8hOciOWfO-qUWSh_fzqQzVburxqSAqwdXoaTgHz1E";
 			URL url = new URL(apiURL);

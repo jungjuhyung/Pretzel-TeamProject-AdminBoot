@@ -1,4 +1,4 @@
-package com.ict.pretzel_admin.lee.translateTool;
+package com.ict.pretzel_admin.jung.tools;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;

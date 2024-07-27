@@ -1,4 +1,4 @@
-package com.ict.pretzel_admin.lee.translateTool;
+package com.ict.pretzel_admin.jung.tools;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -52,7 +52,6 @@ public class TranslateTool_kr {
 
         // 자막 블록으로 나누기 (빈 줄로 구분)
         String[] subs = content.split("\n\n");
-        System.out.println(subs[0]);
 		
 		// 번역할 언어 목록
         List<String> languages = Arrays.asList("ko");

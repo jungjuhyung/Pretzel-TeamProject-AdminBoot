@@ -20,8 +20,8 @@ import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
-import com.ict.pretzel_admin.lee.translateTool.TranslateTool;
-import com.ict.pretzel_admin.lee.translateTool.TranslateTool_kr;
+import com.ict.pretzel_admin.jung.tools.TranslateTool;
+import com.ict.pretzel_admin.jung.tools.TranslateTool_kr;
 import com.ict.pretzel_admin.vo.MovieVO;
 
 import io.jsonwebtoken.io.IOException;
@@ -49,15 +49,12 @@ public class TestController {
 		try {
 			String encode_query = URLEncoder.encode(query, "UTF-8").replaceAll("\\+", "%20");
 			String encode_year = URLEncoder.encode(year, "UTF-8").replaceAll("\\+", "%20");
-			System.out.println(encode_query);
-			System.out.println("check"+encode_year);
 			String apiURL = "";
 			if (year.equals("")) {
 				apiURL = "https://api.themoviedb.org/3/search/movie?query="+encode_query+"&include_adult=true&language=ko-kr&language=en-US";
 			}else{
 				apiURL = "https://api.themoviedb.org/3/search/movie?query="+encode_query+"&year="+encode_year+"&include_adult=true&language=ko-kr&language=en-US";
 			}
-			System.out.println(apiURL);
 			URL url = new URL(apiURL);
 			String api_key = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwYmE1OThkMzg4OTgwZjBlMTJjNmU1N2RkYjRmNjFlNyIsInN1YiI6IjY2NzEzMGNlNDA1YjNhMjk3MDZhYWFlNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.cT8hOciOWfO-qUWSh_fzqQzVburxqSAqwdXoaTgHz1E";
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -178,7 +175,6 @@ public class TestController {
 					sb.append(line);
 				}
 				String result = sb.toString();
-				System.out.println(result);
 				return result;
 			}
 			
@@ -213,7 +209,6 @@ public class TestController {
 					sb.append(line);
 				}
 				String result = sb.toString();
-				System.out.println(result);
 				return result;
 			}
 			
@@ -248,7 +243,6 @@ public class TestController {
 					sb.append(line);
 				}
 				String result = sb.toString();
-				System.out.println(result);
 				return result;
 			}
 			
